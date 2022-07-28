@@ -1,4 +1,6 @@
 workspace "FluidSimulation"
+
+	startproject "Sandbox"
 	architecture "x64"
 	configurations
 	{
