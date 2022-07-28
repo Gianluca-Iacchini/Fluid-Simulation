@@ -3,6 +3,8 @@
 bin/
 bin-int/
 !vendor/bin
+!FluidSimulation/vendor/assimp/bin
+!FluidSimulation/vendor/freetype/bin
 
 # Files
 *.user
