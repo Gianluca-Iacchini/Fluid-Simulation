@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Dist|x64">
+      <Configuration>Dist</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5234E0A7-3ED6-0A7E-2791-1ED213D291CE}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Assimp</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>bin\Debug-windows-x86_64\Assimp\</OutDir>
+    <IntDir>bin-int\Debug-windows-x86_64\Assimp\</IntDir>
+    <TargetName>Assimp</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>bin\Release-windows-x86_64\Assimp\</OutDir>
+    <IntDir>bin-int\Release-windows-x86_64\Assimp\</IntDir>
+    <TargetName>Assimp</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
+    <OutDir>bin\Dist-windows-x86_64\Assimp\</OutDir>
+    <IntDir>bin-int\Dist-windows-x86_64\Assimp\</IntDir>
+    <TargetName>Assimp</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>.;Compiler;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>.;Compiler;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>.;Compiler;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="BaseImporter.h" />
+    <ClInclude Include="Bitmap.h" />
+    <ClInclude Include="BlobIOSystem.h" />
+    <ClInclude Include="ByteSwapper.h" />
+    <ClInclude Include="CreateAnimMesh.h" />
+    <ClInclude Include="DefaultIOStream.h" />
+    <ClInclude Include="DefaultIOSystem.h" />
+    <ClInclude Include="DefaultLogger.hpp" />
+    <ClInclude Include="Defines.h" />
+    <ClInclude Include="Exceptional.h" />
+    <ClInclude Include="Exporter.hpp" />
+    <ClInclude Include="GenericProperty.h" />
+    <ClInclude Include="Hash.h" />
+    <ClInclude Include="IOStream.hpp" />
+    <ClInclude Include="IOStreamBuffer.h" />
+    <ClInclude Include="IOSystem.hpp" />
+    <ClInclude Include="Importer.hpp" />
+    <ClInclude Include="LineSplitter.h" />
+    <ClInclude Include="LogAux.h" />
+    <ClInclude Include="LogStream.hpp" />
+    <ClInclude Include="Logger.hpp" />
+    <ClInclude Include="Macros.h" />
+    <ClInclude Include="MathFunctions.h" />
+    <ClInclude Include="MemoryIOWrapper.h" />
+    <ClInclude Include="NullLogger.hpp" />
+    <ClInclude Include="ParsingUtils.h" />
+    <ClInclude Include="Profiler.h" />
+    <ClInclude Include="ProgressHandler.hpp" />
+    <ClInclude Include="RemoveComments.h" />
+    <ClInclude Include="SGSpatialSort.h" />
+    <ClInclude Include="SceneCombiner.h" />
+    <ClInclude Include="SkeletonMeshBuilder.h" />
+    <ClInclude Include="SmoothingGroups.h" />
+    <ClInclude Include="SmoothingGroups.inl" />
+    <ClInclude Include="SpatialSort.h" />
+    <ClInclude Include="StandardShapes.h" />
+    <ClInclude Include="StreamReader.h" />
+    <ClInclude Include="StreamWriter.h" />
+    <ClInclude Include="StringComparison.h" />
+    <ClInclude Include="StringUtils.h" />
+    <ClInclude Include="Subdivision.h" />
+    <ClInclude Include="TinyFormatter.h" />
+    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="XMLTools.h" />
+    <ClInclude Include="ZipArchiveIOSystem.h" />
+    <ClInclude Include="aabb.h" />
+    <ClInclude Include="ai_assert.h" />
+    <ClInclude Include="anim.h" />
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="cexport.h" />
+    <ClInclude Include="cfileio.h" />
+    <ClInclude Include="cimport.h" />
+    <ClInclude Include="color4.h" />
+    <ClInclude Include="color4.inl" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="defs.h" />
+    <ClInclude Include="fast_atof.h" />
+    <ClInclude Include="importerdesc.h" />
+    <ClInclude Include="irrXMLWrapper.h" />
+    <ClInclude Include="light.h" />
+    <ClInclude Include="material.h" />
+    <ClInclude Include="material.inl" />
+    <ClInclude Include="matrix3x3.h" />
+    <ClInclude Include="matrix3x3.inl" />
+    <ClInclude Include="matrix4x4.h" />
+    <ClInclude Include="matrix4x4.inl" />
+    <ClInclude Include="mesh.h" />
+    <ClInclude Include="metadata.h" />
+    <ClInclude Include="pbrmaterial.h" />
+    <ClInclude Include="postprocess.h" />
+    <ClInclude Include="qnan.h" />
+    <ClInclude Include="quaternion.h" />
+    <ClInclude Include="quaternion.inl" />
+    <ClInclude Include="scene.h" />
+    <ClInclude Include="texture.h" />
+    <ClInclude Include="types.h" />
+    <ClInclude Include="vector2.h" />
+    <ClInclude Include="vector2.inl" />
+    <ClInclude Include="vector3.h" />
+    <ClInclude Include="vector3.inl" />
+    <ClInclude Include="version.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

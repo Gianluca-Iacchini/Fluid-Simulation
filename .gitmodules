@@ -1,0 +1,12 @@
+[submodule "FluidSimulation/vendor/spdlog"]
+	path = FluidSimulation/vendor/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "FluidSimulation/vendor/GLFW"]
+	path = FluidSimulation/vendor/GLFW
+	url = https://github.com/Gianluca-Iacchini/glfw
+[submodule "FluidSimulation/vendor/glm"]
+	path = FluidSimulation/vendor/glm
+	url = https://github.com/g-truc/glm
+[submodule "FluidSimulation/vendor/bullet3"]
+	path = FluidSimulation/vendor/bullet3
+	url = https://github.com/Gianluca-Iacchini/bullet3
