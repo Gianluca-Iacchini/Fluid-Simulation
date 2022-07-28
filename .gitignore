@@ -1,12 +1,16 @@
 # Directories
 .vs/
-bin/*
+bin/
+!/bin/
+/bin/Release-windows-x86_64/
+/bin/Debug-windows-x86_64/FluidSimulation/
+/bin/Debug-windows-x86_64/Sandbox/*
+!/bin/Debug-windows-x86_64/Sandbox/freetype.dll
+
 bin-int/
 !vendor/bin
 !FluidSimulation/vendor/assimp/bin
 !FluidSimulation/vendor/freetype/bin
-!bin/Debug-windows-x86_64/Sandbox/freetype.dll
-
 
 # Files
 *.user
