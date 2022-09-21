@@ -18,4 +18,5 @@ Here are some examples of the simulation
   <img width="313" alt="256" src="https://user-images.githubusercontent.com/34865358/191582395-319e11b0-90d8-4222-b42e-164455f154d3.png"> <img width="313" alt="image" src="https://user-images.githubusercontent.com/34865358/191582348-3c1f9851-770d-42da-ae1e-1b04220460eb.png">
   <img src="https://user-images.githubusercontent.com/34865358/191581942-5c5a519d-9cae-4419-a551-1e785819bb02.gif" alt="animated" />
 </p>
-A video showing clipping and compositing can be found [here](https://youtu.be/c3fzueAaLJA)
+
+A video showing clipping and compositing can be found [here](https://www.youtube.com/watch?v=c3fzueAaLJA)
