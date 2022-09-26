@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <Core/Render/Shader.h>
 
-
+/* Simple class for drawing text */
 namespace FluidSimulation {
 
 	struct FontCharacter

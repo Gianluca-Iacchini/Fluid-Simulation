@@ -5,18 +5,11 @@
 
 using namespace FluidSimulation;
 
-void CheckError2()
-{
-	GLenum err;
-	while ((err = glGetError()) != GL_NO_ERROR)
-	{
-		FS_CORE_WARN("ERROR::GENERIC::{}\n", err);
-	}
-}
 
 
 std::unordered_map<int, FontTextureAtlas*> Text::heightAtlasMap = std::unordered_map<int, FontTextureAtlas*>();
 
+// Creates a Text text at screen position xPosition and yPosition with a font height of height
 Text::Text(std::string text, float xPosition, float yPosition, unsigned int height)
 {
 	this->text = text;
@@ -35,7 +28,7 @@ Text::Text(std::string text, float xPosition, float yPosition, unsigned int heig
 	drawTextProgram = Shader("Text/drawText.vert", "Text/drawText.frag");
 }
 
-
+// Helper function to manage text VAO
 void Text::setUpVAO()
 {
 	glGenVertexArrays(1, &textVAO);
@@ -45,6 +38,7 @@ void Text::setUpVAO()
 	glBindBuffer(GL_ARRAY_BUFFER, textVBO);
 }
 
+// Sets the text string to text
 void FluidSimulation::Text::SetText(std::string text)
 {
 
@@ -52,11 +46,13 @@ void FluidSimulation::Text::SetText(std::string text)
 	
 }
 
+// Sets the text color to color
 void FluidSimulation::Text::SetColor(glm::vec4 color)
 {
 	this->textColor = color;
 }
 
+// Initialization of freetype library
 void FluidSimulation::Text::InitFreeType()
 {
 	if (FT_Init_FreeType(&ft))
@@ -81,6 +77,7 @@ void FluidSimulation::Text::InitFreeType()
 	FT_Done_FreeType(ft);
 }
 
+// Called once every frame
 void Text::Render()
 {
 
@@ -97,9 +94,10 @@ void Text::Render()
 
 	std::vector<glm::vec4> coords;
 
-
+	// Computes new character position
 	for (const char* p = this->text.c_str(); *p; p++)
 	{
+		// Newline
 		if (*p == '\n')
 		{
 			y -= atlas->height * sy;
@@ -127,6 +125,7 @@ void Text::Render()
 		coords.push_back(glm::vec4(x2 + w, -y2 - h, atlas->characters[*p].uvOffsetX + atlas->characters[*p].bitmapWidth / atlas->width, atlas->characters[*p].bitmapHeight / atlas->height));
 	}
 
+	// Draw the text
 	glViewport(0, 0, screenWidth, screenHeight);
 	glBindVertexArray(this->textVAO);
 
@@ -146,13 +145,10 @@ void Text::Render()
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*)0);
 
 	glDrawArrays(GL_TRIANGLES, 0, coords.size());
-	
-
-	CheckError2();
 }
 
 
-
+// Texture atlas generation. All text characters are written to this texture.
 FontTextureAtlas::FontTextureAtlas(FT_Face face, int h)
 {
 	{

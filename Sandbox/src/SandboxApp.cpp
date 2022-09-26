@@ -16,7 +16,7 @@ public:
 	ExampleLayer(Application* app) : Layer("Example")
 	{
 		
-
+		// Initialize camera and cubes around the scene
 		initialScene = new Scene(app);
 		Scene::currentScene = initialScene;
 		Node::InitRootNode();
@@ -32,26 +32,35 @@ public:
 		Node* cameraNode = new Node();
 
 		Node* redNode = new Node();
+		Node* blueNode = new Node();
+		Node* greenNode = new Node();
 
-		Render* render = new Render(redCube, cubeShader);
+		Render* renderRed = new Render(redCube, cubeShader);
+		Render* renderBlue = new Render(blueCube, cubeShader);
+		Render* renderGreen = new Render(greenCube, cubeShader);
 
 
 
 		cameraNode->transform->SetPosition(glm::vec3(0.f, 0.f, -2.0f));
 
 		redNode->transform->SetPosition(glm::vec3(2.0f, 0.0f, -1.0f));
+		blueNode->transform->SetPosition(glm::vec3(-2.0f, 0.0f, -1.0f));
+		greenNode->transform->SetPosition(glm::vec3(0.0f, 0.0f, -2.0f));
 
-		redNode->AddComponent(render);
+		redNode->AddComponent(renderRed);
+		blueNode->AddComponent(renderBlue);
+		greenNode->AddComponent(renderGreen);
 
 
-		// camera
 		Camera* camera = new Camera(cameraNode);
 		Camera::mainCamera = camera;
 		camera->HideMouseCursor(true);
 
+		// Initialize fluid
 		fluid = Fluid(glm::vec3(128));
 		fluid.Initialize();
 
+		// Initialize cubemap
 		std::vector<std::string> cubeMapFaces{
 			"..\\FluidSimulation\\res\\Cubemaps\\right.jpg",
 			"..\\FluidSimulation\\res\\Cubemaps\\left.jpg",
@@ -63,10 +72,12 @@ public:
 
 		cubeMap = new Cubemap(cubeMapFaces);
 
+		// Initialize fps text
 		text = new Text("FPS: 0\nFRAME TIME: 0ms", -0.95, 0.87, 32);
 		text->SetColor(glm::vec4(1, 1, 0, 1));
 	}
 
+	// Called once every frame
 	void OnUpdate() override
 	{
 		
@@ -80,20 +91,24 @@ public:
 
 
 
-
+		// Write scene to fluid depthbuffer texture
 		fluid.DrawDepthBuffer();
 
+		// Render cubemap
 		glDisable(GL_DEPTH_TEST);
 		cubeMap->Render();
 		glEnable(GL_DEPTH_TEST);
 
+		// Update scene
 		initialScene->Update();
 		
+		// Update time
 		float deltaTime = time.getDeltaTime();
 
-
+		// Update and render fluid.
 		fluid.Update(deltaTime);
 
+		// Update fps text value
 		float currentTime = initialScene->time.getCurrentTime();
 		fps++;
 

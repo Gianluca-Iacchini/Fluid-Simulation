@@ -4,6 +4,11 @@
 
 #include <vector>
 
+/*
+	Layer management class for events and rendering sorting from Hazel
+	https://github.com/TheCherno/Hazel
+*/
+
 namespace FluidSimulation {
 	class LayerStack
 	{

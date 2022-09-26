@@ -8,12 +8,14 @@
 
 namespace FluidSimulation {
 
+	// Initialize Render component with a model *model and a shader *shader
 	Render::Render(Model* model, Shader* shader)
 	{
 		this->model = model;
 		this->shader = shader;
 	}
 
+	// Draw is called once every frame.
 	void Render::Draw()
 	{
 
@@ -24,12 +26,14 @@ namespace FluidSimulation {
 
 		Camera* camera = Camera::mainCamera;
 
+		// Create mvp matrix
 		glm::mat4 viewMatrix = camera->GetViewMatrix();
 		glm::mat4 projectionMatrix = glm::perspective(glm::radians(camera->Zoom), screenWidth / screenHeight, 0.1f, 100.0f);
 		glm::mat4 modelMatrix = this->CreateModelMatrix();
 
 		glViewport(0, 0, screenWidth, screenHeight);
 
+		// Draw the model model using the shader shader
 		this->shader->Use();
 		shader->SetMat4("view", viewMatrix);
 		shader->SetMat4("projection", projectionMatrix);
@@ -37,6 +41,7 @@ namespace FluidSimulation {
 		model->Draw(*shader);
 	}
 
+	// Returns this node mvp matrix
 	glm::mat4 Render::CreateModelMatrix()
 	{
 		glm::mat4 modelMatrix = glm::mat4(1.0f);

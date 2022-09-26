@@ -10,6 +10,7 @@ out int vInstance;
 out vec2 TexCoords;
 out vec2 CellCoords;
 
+// Basic vertex shader for drawing a full screen quad with instancing
 void main()
 {
     vInstance = gl_InstanceID;

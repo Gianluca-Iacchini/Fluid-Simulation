@@ -3,6 +3,9 @@
 #include "Component.h"
 #include "Transform.h"
 
+
+/* Naive implementation of a scene management node class */
+
 namespace FluidSimulation {
 	// Forward declaration
 	class Scene;

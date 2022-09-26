@@ -18,6 +18,7 @@ IncludeDir["Glad"] = "FluidSimulation/vendor/Glad/include"
 IncludeDir["glm"] = "FluidSimulation/vendor/glm"
 IncludeDir["assimp"] = "FluidSimulation/vendor/assimp"
 IncludeDir["stb_image"] = "FluidSimulation/vendor/stb_image"
+IncludeDir["ImGui"] = "FluidSimulation/vendor/imgui"
 IncludeDir["bullet3"] = "FluidSimulation/vendor/bullet3/src"
 IncludeDir["Bullet3Common"] = "FluidSimulation/vendor/bullet3/src/Bullet3Common"
 IncludeDir["Bullet3Collision"] = "FluidSimulation/vendor/bullet3/src/Bullet3Collision"
@@ -29,6 +30,7 @@ IncludeDir["FreeType"] = "FluidSimulation/vendor/freetype"
 
 include "FluidSimulation/vendor/GLFW"
 include "FluidSimulation/vendor/Glad"
+include "FluidSimulation/vendor/imgui"
 include "FluidSimulation/vendor/assimp"
 include "FluidSimulation/vendor/bullet3/src/Bullet3Collision"
 include "FluidSimulation/vendor/bullet3/src/BulletCollision"
@@ -59,7 +61,7 @@ project "FluidSimulation"
 		"%{prj.name}/src/**.vert",
 		"%{prj.name}/src/**.geom",
 		"%{prj.name}/vendor/stb_image/**.h",
-		"%{prj.name}/vendor/stb_image/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.cpp",		
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
 	}
@@ -81,13 +83,15 @@ project "FluidSimulation"
 		"%{IncludeDir.LinearMath}",
 		"%{IncludeDir.assimp}",
 		"%{IncludeDir.FreeType}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.ImGui}",
 	}
 
 	links
 	{
 		"GLFW",
 		"Glad",
+		"ImGui",
 		"Assimp",
 		"FreeType",
 		"opengl32.lib",

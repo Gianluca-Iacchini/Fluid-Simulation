@@ -2,6 +2,11 @@
 #include "Application.h"
 #include <GLFW/glfw3.h>
 
+/*
+	Application management class from Hazel
+	https://github.com/TheCherno/Hazel
+*/
+
 
 namespace FluidSimulation {
 

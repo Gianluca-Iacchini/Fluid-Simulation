@@ -21,6 +21,7 @@ bool IsNonEmptyCell(vec3 texCoords)
     return texture(obstacle, texCoords).x > 0;
 }
 
+// Computes fluid vorticity using the Poisson equation.
 void main()
 {
 	ivec3 fragCoords = ivec3(cellCoords);

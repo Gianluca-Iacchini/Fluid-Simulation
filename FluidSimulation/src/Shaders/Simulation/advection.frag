@@ -50,6 +50,7 @@ vec4 trilerp(sampler3D sam, vec3 pos, vec3 inverseGridSize)
 
 void main()
 {    
+
     // If there is an obstacle in the current cell then kill the fragment shader early.
     if (IsNonEmptyCell(ivec3(cellCoords)))
     {
@@ -57,11 +58,12 @@ void main()
         return;
     }
 
-
+    // Otherwise we compute the final advection quantity by reversing the imaginary particle position and retreiveing the values at that location.
     vec3 velocity = texture(velocity, texCoords).xyz;
 
     vec3 coord =  cellCoords - timeStep * velocity;
 
+    // We interpolate the values obtained.
     FragColor = trilerp(quantity, coord, (1.f / gridDimension)) * dissipation;
 }
 

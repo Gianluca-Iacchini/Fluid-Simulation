@@ -1,4 +1,6 @@
 #version 410 core
+// Basic model drawing fragment shader from learnopengl.com
+// https://learnopengl.com/Model-Loading/Model
 
 out vec4 FragColor;
 

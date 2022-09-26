@@ -2,6 +2,12 @@
 #include "Log.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
+/*
+	spdlog wrapper function for Log management from Hazel
+	https://github.com/TheCherno/Hazel
+*/
+
+
 namespace FluidSimulation
 {
 	std::shared_ptr<spdlog::logger> Log::s_CoreLogger;

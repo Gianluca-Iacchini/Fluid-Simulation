@@ -4,7 +4,7 @@
 
 namespace FluidSimulation {
 
-
+	/* Cube object class */
 	class Cube : public Model
 	{
 	public:

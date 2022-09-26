@@ -1,5 +1,10 @@
 #pragma once
 
+/*
+// Event class from Hazel Engine https://github.com/TheCherno/Hazel
+// This class dispatches events (inputs, window resize, window close) from the GLFW callbacks.
+*/
+
 #include "Core/Core.h"
 
 

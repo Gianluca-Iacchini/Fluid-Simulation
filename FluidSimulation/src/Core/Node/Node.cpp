@@ -9,6 +9,7 @@ namespace FluidSimulation {
 
 	Node* Node::rootNode = nullptr;
 
+	//Add node at position position, with rotation rotation and scale scale, and a parent *parent
 	Node::Node(glm::vec3 position, glm::fquat rotation, glm::vec3 scale, Node* parent) : scene(Scene::currentScene)
 	{
 		Transform* transform = nullptr;
@@ -23,6 +24,7 @@ namespace FluidSimulation {
 		scene->AddNode(this);
 	}
 
+	//Add a node with parent *parent
 	Node::Node(Node* parent) : scene(Scene::currentScene)
 	{
 		Transform* transform = nullptr;
@@ -38,7 +40,7 @@ namespace FluidSimulation {
 	}
 
 
-
+	//Add a node with transform *transform
 	Node::Node(Transform* transform) : scene(Scene::currentScene)
 	{
 		this->transform = transform;
@@ -46,13 +48,13 @@ namespace FluidSimulation {
 		scene->AddNode(this);
 	}
 
-
+	//Create the root node
 	void Node::InitRootNode()
 	{
 		rootNode = new Node();
 	}
 
-
+	//Add component *comp to this node
 	void Node::AddComponent(Component* comp)
 	{
 
@@ -63,6 +65,7 @@ namespace FluidSimulation {
 		}
 	}
 
+	//Update function is called every frame
 	void Node::Update()
 	{
 		for (Component* comp : this->components)

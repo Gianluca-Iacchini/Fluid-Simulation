@@ -1,5 +1,11 @@
 #pragma once
 #include <inttypes.h>
+
+/*
+	Mouse keycodes for input management from Hazel
+	https://github.com/TheCherno/Hazel
+*/
+
 namespace FluidSimulation
 {
 	using MouseCode = uint16_t;

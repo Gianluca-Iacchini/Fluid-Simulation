@@ -1,4 +1,8 @@
 #pragma once
+/*
+	Model class from learnopengl.com
+	https://learnopengl.com/Model-Loading/Model
+*/
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

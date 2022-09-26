@@ -1,6 +1,11 @@
 #pragma once
 #include <inttypes.h>
 
+/*
+	Keycodes for input management from Hazel
+	https://github.com/TheCherno/Hazel
+*/
+
 namespace FluidSimulation
 {
 	using KeyCode = uint16_t;

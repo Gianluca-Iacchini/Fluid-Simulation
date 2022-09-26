@@ -2,7 +2,10 @@
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 #include <glm/glm.hpp>
+
+
 namespace FluidSimulation {
+	/* Framebuffer wrapper class */
 	class Framebuffer
 	{
 	public:

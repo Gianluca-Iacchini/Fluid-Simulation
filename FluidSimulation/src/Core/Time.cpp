@@ -4,6 +4,7 @@
 
 namespace FluidSimulation {
 
+	// Called every frame
 	void Time::Update()
 	{
 		double currentTime = glfwGetTime();
@@ -11,16 +12,19 @@ namespace FluidSimulation {
 		lastTime = currentTime;
 	}
 
+	// Wrapper function for glfwGetTime
 	double Time::getCurrentTime() const
 	{
 		return glfwGetTime();
 	}
 
+	// Returns time between frames
 	double Time::getDeltaTime() const
 	{
 		return this->deltaTime;
 	}
 
+	// Default constructor
 	Time::Time()
 	{
 		this->deltaTime = 0.0;

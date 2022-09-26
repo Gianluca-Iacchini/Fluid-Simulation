@@ -1,27 +1,24 @@
 #include "fspch.h"
 #include "Framebuffer.h"
 
-void CheckError()
-{
-	GLenum err;
-	while ((err = glGetError()) != GL_NO_ERROR)
-	{
-		FS_CORE_WARN("ERROR::GENERIC::%x\n", err);
-	}
-}
+
 
 namespace FluidSimulation {
 
+	// Initialize a 3D framebuffer with width width, height height and depth depth and nComponents components.
 	Framebuffer::Framebuffer(GLsizei width, GLsizei height, GLsizei depth, int nComponents)
 	{
 		this->initFramebuffer3D(width, height, depth, nComponents);
 
 	}
+
+	// Initialize a 3D framebuffer with width, height and depth given by the size parameter and nComponents components
 	Framebuffer::Framebuffer(glm::vec3 size, int nComponents)
 	{
 		this->initFramebuffer3D(size.x, size.y, size.z, nComponents);
 	}
 
+	// Initialize a 2D framebuffer with width width, height height and depth and nComponents components.
 	Framebuffer::Framebuffer(GLsizei width, GLsizei height, int nComponents)
 	{
 		this->initFramebuffer2D(width, height, nComponents);
@@ -31,13 +28,15 @@ namespace FluidSimulation {
 		this->initFramebuffer2D(size.x, size.y, nComponents);
 	}
 
-	// Initialize a framebuffer with a color texture of given width, height, and depth
+	// Framebuffer 3D initialization helper function
 	void Framebuffer::initFramebuffer3D(GLsizei width, GLsizei height, GLsizei depth, int nComponents)
 	{
+		// Framebuffer creation
 		GLuint fboHandle;
 		glGenFramebuffers(1, &fboHandle);
 		glBindFramebuffer(GL_FRAMEBUFFER, fboHandle);
 
+		// Framebuffer texture creation
 		GLuint textureHandle;
 		glGenTextures(1, &textureHandle);
 		glBindTexture(GL_TEXTURE_3D, textureHandle);
@@ -47,6 +46,7 @@ namespace FluidSimulation {
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+		// Switch on nComponents to determine the number of channels for the texture
 		switch (nComponents) {
 		case 1:
 			glTexImage3D(GL_TEXTURE_3D, 0, GL_R32F, width, height, depth, 0, GL_RED, GL_FLOAT, 0);
@@ -62,6 +62,7 @@ namespace FluidSimulation {
 			break;
 		}
 
+		// Attaching texture to framebuffer colorbuffer
 		GLuint colorbuffer;
 		glGenRenderbuffers(1, &colorbuffer);
 		glBindRenderbuffer(GL_RENDERBUFFER, colorbuffer);
@@ -70,7 +71,7 @@ namespace FluidSimulation {
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 			std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 
-
+		// Setting up variables and clearing state
 		glClearColor(0, 0, 0, 0);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -86,13 +87,15 @@ namespace FluidSimulation {
 		this->nComponents = nComponents;
 	}
 
-	// Same as previous function but for 2D textures
+	// Framebuffer 2D initialization helper function
 	void Framebuffer::initFramebuffer2D(GLsizei width, GLsizei height, int nComponents)
 	{
+		// Framebuffer creation
 		GLuint fboHandle;
 		glGenFramebuffers(1, &fboHandle);
 		glBindFramebuffer(GL_FRAMEBUFFER, fboHandle);
 
+		// Framebuffer texture creation
 		GLuint textureHandle;
 		glGenTextures(1, &textureHandle);
 		glBindTexture(GL_TEXTURE_2D, textureHandle);
@@ -101,6 +104,7 @@ namespace FluidSimulation {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+		// Switch on nComponents to determine the number of channels for the texture
 		switch (nComponents) {
 		case 1:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, 0);
@@ -116,6 +120,7 @@ namespace FluidSimulation {
 			break;
 		}
 
+		// Attaching texture to framebuffer colorbuffer
 		GLuint colorbuffer;
 		glGenRenderbuffers(1, &colorbuffer);
 		glBindRenderbuffer(GL_RENDERBUFFER, colorbuffer);
@@ -124,6 +129,7 @@ namespace FluidSimulation {
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 			FS_CORE_WARN("FRAMEBUFFER 2D TEXTURE ERROR");
 
+		// Setting up variables and clearing state
 		this->FBOHandle = fboHandle;
 		this->colorTextureHandle = textureHandle;
 		this->framebufferDim = GL_TEXTURE_2D;
@@ -148,6 +154,7 @@ namespace FluidSimulation {
 		ppFBO.writeFBO = temp;
 	}
 
+	// Create a PingPongFramebuffer by creating two framebuffers with fbo nComponents, width, height and depth (if 3D)
 	Framebuffer::PingPongFramebuffer Framebuffer::CreateDoubleFramebuffer(Framebuffer fbo)
 	{
 		GLsizei width = fbo.width;
@@ -176,12 +183,14 @@ namespace FluidSimulation {
 		return ppfbo;
 	}
 
+	// Create a 3D PingPongFramebbufer by creating two framebuffers with size size and nComponents nComponents
 	Framebuffer::PingPongFramebuffer Framebuffer::CreateDoubleFramebuffer(glm::vec3 size, int nComponents)
 	{
 		PingPongFramebuffer ppfbo = { new Framebuffer(size, nComponents), new Framebuffer(size, nComponents) };
 		return ppfbo;
 	}
 
+	// Create a 2D PingPongFramebbufer by creating two framebuffers with size size and nComponents nComponents
 	Framebuffer::PingPongFramebuffer Framebuffer::CreateDoubleFramebuffer(glm::vec2 size, int nComponents)
 	{
 		PingPongFramebuffer ppfbo = { new Framebuffer(size, nComponents), new Framebuffer(size, nComponents) };
@@ -194,6 +203,7 @@ namespace FluidSimulation {
 
 		glBindFramebuffer(GL_FRAMEBUFFER, FBOHandle);
 
+		// Generating depth texture
 		glGenTextures(1, &depthTextureHandle);
 		glBindTexture(GL_TEXTURE_2D, depthTextureHandle);
 
@@ -205,6 +215,7 @@ namespace FluidSimulation {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 
+		// Attaching depth texture
 		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTextureHandle, 0);
 
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)

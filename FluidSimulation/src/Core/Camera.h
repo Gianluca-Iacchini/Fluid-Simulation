@@ -1,5 +1,10 @@
 #pragma once
 
+/* 
+	Camera class from learnopengl.com
+	https://learnopengl.com/Getting-started/Camera
+*/
+
 #include <glad/glad.h>
 #include "Node/Component.h"
 #include <glm/glm.hpp>
@@ -7,6 +12,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
+#include "Events/KeyEvent.h"
 
 namespace FluidSimulation {
 
@@ -63,11 +69,14 @@ namespace FluidSimulation {
 
 		bool OnMouseMove(MouseMovedEvent& e);
 
+		bool OnKeyEvent(KeyPressedEvent& e);
+
 
 	private:
 		void updateCameraVectors();
 		float lastX;
 		float lastY;
 		float firstMouse = true;
+		float isCursorVisible = false;
 	};
 }

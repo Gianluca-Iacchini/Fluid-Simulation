@@ -3,6 +3,11 @@
 #include "Core/Core.h"
 #include "Core/Events/Event.h"
 
+/*
+	Layer management class for events and rendering sorting from Hazel
+	https://github.com/TheCherno/Hazel
+*/
+
 namespace FluidSimulation {
 	class Layer
 	{

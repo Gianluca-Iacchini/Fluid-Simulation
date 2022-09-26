@@ -6,6 +6,7 @@
 
 using namespace FluidSimulation;
 
+// Initialize a cubemap using textures whose path is given by the "faces" vector
 Cubemap::Cubemap(vector<string> faces)
 {
 	this->faces = faces;
@@ -21,6 +22,7 @@ Cubemap::Cubemap(vector<string> faces)
 	cubeMapShader = new Shader("Cubemap/cube_map.vert", "Cubemap/cube_map.frag");
 }
 
+// Render function is called once every frame
 void Cubemap::Render()
 {
 	Camera* camera = Camera::mainCamera;
@@ -44,6 +46,7 @@ void Cubemap::Render()
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
+// Default cubemap initialization
 Cubemap::Cubemap()
 {
 	float screenWidth = Application::Get().GetWindow().GetWidth();
@@ -57,6 +60,7 @@ Cubemap::Cubemap()
 	cubeMapShader = new Shader("Cubemap/cube_map.vert", "Cubemap/cube_map.frag");
 }
 
+// Helper function for cubemap textures creation.
 void FluidSimulation::Cubemap::initTextures()
 {
 	glGenTextures(1, &textureID);
@@ -88,6 +92,7 @@ void FluidSimulation::Cubemap::initTextures()
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 }
 
+// Helper function for VAO and VBO management.
 void FluidSimulation::Cubemap::initVertices()
 {
 	glGenVertexArrays(1, &cubeMapVAO);

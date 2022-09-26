@@ -4,13 +4,18 @@
 #include "Core/Application.h"
 #include <GLFW/glfw3.h>
 
+/*
+	Class for Input management on Windows platform from Hazel
+	https://github.com/TheCherno/Hazel
+*/
+
 namespace FluidSimulation {
 
-	bool Input::IsKeyPressed(const KeyCode key)
+	bool Input::GetKey(const KeyCode key)
 	{
 		auto* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetKey(window, static_cast<int32_t>(key));
-		return state == GLFW_PRESS || state == GLFW_REPEAT;
+		return state == GLFW_REPEAT || state == GLFW_PRESS;
 	}
 
 	bool Input::IsMouseButtonPressed(const MouseCode button)

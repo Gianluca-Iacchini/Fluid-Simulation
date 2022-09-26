@@ -1,4 +1,8 @@
 #pragma once
+/* 
+	Application management class from Hazel
+	https://github.com/TheCherno/Hazel
+*/
 
 #include "Window.h"
 #include "Core/LayerStack.h"
@@ -18,7 +22,7 @@ namespace FluidSimulation {
 		static Application& Get() { return *s_Instance; }
 
 		void Run();
-
+		void End() { m_Running = false; }
 		void OnEvent(Event& e);
 
 		void PushLayer(Layer* layer);

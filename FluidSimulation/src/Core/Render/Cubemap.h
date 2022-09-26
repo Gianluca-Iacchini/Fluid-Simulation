@@ -5,6 +5,8 @@
 #include <vector>
 #include "Core/Render/Shader.h"
 
+/* Cubemap wrapper class */
+
 using namespace std;
 namespace FluidSimulation {
 	class Cubemap

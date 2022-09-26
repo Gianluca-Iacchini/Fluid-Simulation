@@ -6,6 +6,7 @@
 
 namespace FluidSimulation {
 
+    // Physics initialization method
     Physics::Physics(Time& time) : time(time)
     {
         this->collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -19,6 +20,7 @@ namespace FluidSimulation {
         this->dynamicsWorld->setGravity(btVector3(0.0f, -9.82f, 0.0f));
     }
 
+    // Physics deconstructor method
     void Physics::Clear()
     {
         for (int i = this->dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--)
@@ -47,6 +49,7 @@ namespace FluidSimulation {
         this->collisionShapes.clear();
     }
 
+    // Update function is called once every frame
     void Physics::Update()
     {
         dynamicsWorld->stepSimulation(this->time.getDeltaTime() > 1.f / 60.f ? this->time.getDeltaTime() : 1.f / 60.f, 10);

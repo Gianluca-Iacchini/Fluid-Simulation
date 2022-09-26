@@ -3,6 +3,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include <vector>
 
+/* Implementation of a simple transform class for nodes in the scene. */
 namespace FluidSimulation {
 
 	class Transform

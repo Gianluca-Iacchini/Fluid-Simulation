@@ -1,7 +1,14 @@
 #include "fspch.h"
+#include "imgui.h"
+#include "Platform/OpenGL/imgui_impl_glfw.h"
+#include "Platform/OpenGL/imgui_impl_opengl3.h"
+
+
 #include "Fluid.h"
 #include "Core/Camera.h"
 #include "Core/Application.h"
+#include "Core/Input.h"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace FluidSimulation {
 
@@ -23,7 +30,6 @@ namespace FluidSimulation {
 		gradientSubtractionProgram = new Shader("Simulation/basicFluid.vert", "Simulation/gradientSubtraction.frag", "Simulation/layeredRender.geom");
 		buoyancyProgram = new Shader("Simulation/basicFluid.vert", "Simulation/buoyancy.frag", "Simulation/layeredRender.geom");
 		clearProgram = new Shader("Simulation/basicFluid.vert", "Simulation/clearTexture.frag", "Simulation/layeredRender.geom");
-		setColorProgram = new Shader("Simulation/basicFluid.vert", "Simulation/setColor.frag", "Simulation/layeredRender.geom");
 		pressureProgram = new Shader("Simulation/basicFluid.vert", "Simulation/jacobi.frag", "Simulation/layeredRender.geom");
 		diffuseProgram = new Shader("Simulation/basicFluid.vert", "Simulation/jacobi.frag", "Simulation/layeredRender.geom");
 		vorticityProgram = new Shader("Simulation/basicFluid.vert", "Simulation/vorticity.frag", "Simulation/layeredRender.geom");
@@ -52,6 +58,8 @@ namespace FluidSimulation {
 
 		depthBuffer = new Framebuffer(screenSize, 4);
 		depthBuffer->AttachDepthBufferTexture();
+
+		drawBuffer = &dye.readFBO;
 
 		setUpQuad();
 		setUpBox();
@@ -394,7 +402,7 @@ namespace FluidSimulation {
         buoyancyProgram->SetInt("temperature", Read(velocity.readFBO, 2));
         buoyancyProgram->SetInt("dye", Read(dye.readFBO, 3));
         buoyancyProgram->SetFloat("timeStep", timeStep);
-        buoyancyProgram->SetFloat("ambientTemp", 0);
+        buoyancyProgram->SetFloat("ambientTemp", param.AMBIENT_TEMPERATURE);
         buoyancyProgram->SetFloat("buoyancy", buoyancy);
         buoyancyProgram->SetFloat("weight", fluidWeight);
         Write(velocity.writeFBO);
@@ -410,16 +418,22 @@ namespace FluidSimulation {
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
 
-
         //////////////////
         ///// ADVECT /////
         //////////////////
 
         // We advect velocity first;
-        Advect(velocity, timeStep,1);
+		if (useMacCormackVelocity)
+			MacCormackAdvect(velocity, timeStep, 0.9995f);
+		else
+			Advect(velocity, timeStep, 0.9995f);
 
         // Then we advect other quantities.
-        Advect(dye, timeStep, param.DISSIPATION);
+		if (useMacCormackDye)
+			MacCormackAdvect(dye, timeStep, param.DISSIPATION);
+		else
+			Advect(dye, timeStep, param.DISSIPATION);
+
         Advect(temperature, timeStep, 1);
 
 
@@ -432,28 +446,28 @@ namespace FluidSimulation {
 
         if (isImpulse)
         {
-
-            //Impulse(velocity, glm::vec3(0, 100, 0), glm::vec3(0.5, 0.2, 0.5) * gridDimension, 12);
-
-            //isImpulse = false;
-
+            Impulse(velocity, param.IMPULSE_FORCE, param.IMPULSE_POSITION * gridDimension, param.IMPULSE_RADIUS);
         }
 
 		if (isImpulseDye)
 		{
-			Impulse(dye, glm::vec3(12), glm::vec3(0.5, 0.2, 0.5) * gridDimension, 16);
-            Impulse(temperature, glm::vec3(12), glm::vec3(0.5, 0.2, 0.5) * gridDimension, 16);
-			//isImpulseDye = false;
+			Impulse(dye, param.DYE_COLOR * param.DYE_DENSITY, param.FLUID_POSITION * gridDimension, param.DYE_RADIUS);
+            Impulse(temperature, glm::vec3(param.TEMPERATURE), param.FLUID_POSITION * gridDimension, param.DYE_RADIUS);
+
 		}
 
-        Buoyancy(velocity, dye, timeStep, 1.f, 0.125f);
+		if (isBuoyancy)
+		{
+			Buoyancy(velocity, dye, timeStep, param.BUOYANCY, param.FLUID_WEIGHT);
+		}
+
 
         ////////////////////////////////////
         /////////////// VORTICITY //////////
         ////////////////////////////////////
 
 
-        Vorticity(timeStep, 0.35f);
+        Vorticity(timeStep, param.VORTICITY);
 
 
 
@@ -461,7 +475,7 @@ namespace FluidSimulation {
         /////////////////// PRESSURE //////////////////////
         ///////////////////////////////////////////////////
 
-        JacobiPressure(100, 0.0f);
+        JacobiPressure(100, param.PRESSURE);
 
         //////////////////////////////////////////////////////////////
         //////////////////////////// Gradient Subtraction ////////////
@@ -469,7 +483,16 @@ namespace FluidSimulation {
 
         GradientSubtraction();
         
+		//IMGUI
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+		//
+
+
         Render();
+
+		ImGuiControlWindowUpdate();
     }
 
 	// Render the fluid in the scene
@@ -636,7 +659,9 @@ namespace FluidSimulation {
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, jitterTexture);
 		rayMarchProgram->SetInt("jitterTexture", 1);
-		rayMarchProgram->SetInt("dyeTexture", Read(dye.readFBO, 2));
+		
+		if (drawBuffer != NULL && *drawBuffer != NULL)
+			rayMarchProgram->SetInt("dyeTexture", Read(*drawBuffer, 2));
 
 
 
@@ -668,6 +693,220 @@ namespace FluidSimulation {
 		glEnable(GL_BLEND);
 		glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
 		glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ONE);
+	}
+
+	void Fluid::ImGuiControlWindowUpdate()
+	{
+		
+		glm::vec2 windowSize = screenSize;
+
+		int totalItems = imguiIsBuoyancy ? 15 : 15;
+		windowSize.x = screenSize.x < 1920 ? windowSize.x / 2.6f : windowSize.x / 3.5f;
+
+		float itemsHeight = totalItems * (ImGui::CalcTextSize("Reset").y + ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2) + totalItems * 3.f;
+		float itemsWidth = ImGui::CalcTextSize("Impulse pos Reset").x + (ImGui::GetStyle().FramePadding.x * 4) + windowSize.x * 0.65f;
+												
+		ImGui::SetNextWindowSize(ImVec2(itemsWidth, itemsHeight));
+		ImGui::SetNextWindowPos(ImVec2(screenSize.x - itemsWidth, 0.f));
+
+
+
+		
+		ImGui::Begin("Fluid simulation control values", 0, ImGuiWindowFlags_NoResize);
+
+
+		ImVec2 imguiSize = ImGui::GetWindowSize();
+
+
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);		
+		ImGui::SliderFloat("Radius", &param.DYE_RADIUS, 5.f, 25.f);
+		ImGui::SameLine(imguiSize.x - (ImGui::CalcTextSize("Reset").x + ImGui::GetStyle().FramePadding.x * 2 + ImGui::GetFontSize()));
+		if (ImGui::Button("Reset##1"))
+		{
+			param.DYE_RADIUS = 16.0f;
+		}
+
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+		float *fluidPos = glm::value_ptr(param.FLUID_POSITION);
+		ImGui::SliderFloat3("Dye position", fluidPos, 0.0f, 1.0f);
+		param.FLUID_POSITION = glm::make_vec3(fluidPos);
+		ImGui::SameLine(imguiSize.x - (ImGui::CalcTextSize("Reset").x + ImGui::GetStyle().FramePadding.x * 2 + ImGui::GetFontSize()));
+		if (ImGui::Button("Reset##2"))
+		{
+			param.FLUID_POSITION = glm::vec3(0.5f, 0.2f, 0.5f);
+		}
+
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+		float* fluidColor = glm::value_ptr(param.DYE_COLOR);
+		ImGui::ColorEdit3("Dye Color", fluidColor);
+		param.DYE_COLOR = glm::make_vec3(fluidColor);
+		ImGui::SameLine(imguiSize.x - (ImGui::CalcTextSize("Reset").x + ImGui::GetStyle().FramePadding.x * 2 + ImGui::GetFontSize()));
+		if (ImGui::Button("Reset##3"))
+		{
+			param.DYE_COLOR = glm::vec3(1.0f);
+		}
+
+
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+	    ImGui::SliderFloat("Dissipation", &imguiDissipation, 0, 1.f);
+		param.DISSIPATION = glm::mix(1.f, 0.9f, imguiDissipation);
+		ImGui::SameLine(imguiSize.x - (ImGui::CalcTextSize("Reset").x + ImGui::GetStyle().FramePadding.x * 2 + ImGui::GetFontSize()));
+		if (ImGui::Button("Reset##4"))
+		{
+			imguiDissipation = 0.0f;
+		}
+
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+		ImGui::SliderFloat("Vorticity", &param.VORTICITY, 0.f, 2.5f);
+		ImGui::SameLine(imguiSize.x - (ImGui::CalcTextSize("Reset").x + ImGui::GetStyle().FramePadding.x * 2 + ImGui::GetFontSize()));
+		if (ImGui::Button("Reset##5"))
+		{
+			param.VORTICITY = 0.35f;
+		}
+
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+		ImGui::Checkbox("MacCormack Dye", &useMacCormackDye);
+
+		ImGui::SameLine(ImGui::GetStyle().GrabMinSize + ImGui::GetItemRectSize().x + ImGui::GetStyle().ItemSpacing.x);
+		ImGui::Checkbox("MacCormack Velocity", &useMacCormackVelocity);
+
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 30.f);
+		char* buttonString = isBuoyancy ? "Switch to impulse" : "Switch to buoyancy";
+		ImGui::SetCursorPosX((imguiSize.x - ImGui::CalcTextSize(buttonString).x) / 4.f);
+		if (ImGui::Button(buttonString))
+		{
+			imguiIsBuoyancy = !imguiIsBuoyancy;
+		}
+
+
+		ImVec2 imguiSize2 = ImGui::GetWindowSize();
+
+		this->ImGuiBuoyancyImpulseSwitcher();
+
+		const char* items[]{ "Dye", "Velocity", "Pressure", "Divergence" };
+		int selectedItem = 0;
+
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 20.f);
+		if (ImGui::BeginListBox("Render target", ImVec2(imguiSize.x * 0.65f, (ImGui::CalcTextSize("Pressure").y + ImGui::GetStyle().FramePadding.y * 2) * 4)))
+		{
+			if (ImGui::Selectable("Dye", drawBuffer == &dye.readFBO))
+			{
+				drawBuffer = &dye.readFBO;
+			}
+			else if (ImGui::Selectable("Velocity", drawBuffer == &velocity.readFBO))
+			{
+				drawBuffer = &velocity.readFBO;
+			}
+			else if (ImGui::Selectable("Pressure", drawBuffer == &pressure.readFBO))
+			{
+				drawBuffer = &pressure.readFBO;
+			}
+			else if (ImGui::Selectable("Divergence", drawBuffer == &divergence))
+			{
+				drawBuffer = &divergence;
+			}
+			ImGui::EndListBox();
+		}
+
+
+
+
+
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+		ImGui::SetCursorPosX((imguiSize.x - ImGui::CalcTextSize("Reset all to default").x) / 4.f);
+		if (ImGui::Button("Reset all to default"))
+		{
+			param.DYE_RADIUS = 16.0f;
+			param.FLUID_POSITION = glm::vec3(0.5f, 0.2f, 0.5f);
+			param.DYE_COLOR = glm::vec3(1.0f);
+			imguiDissipation = 0.01f;
+			param.VORTICITY = 0.35f;
+			param.BUOYANCY = 1.0f;
+			param.TEMPERATURE = 12.f;
+			param.FLUID_WEIGHT = 0.125f;
+			param.IMPULSE_POSITION = glm::vec3(0.5f, 0.2f, 0.5f);
+			param.IMPULSE_RADIUS = 12.f;
+			param.IMPULSE_FORCE = glm::vec3(0.f, 100.f, 0.0f);
+			drawBuffer = &dye.readFBO;
+			useMacCormackDye = false;
+			useMacCormackVelocity = false;
+		}
+
+		ImGui::End();
+
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
+
+	void Fluid::ImGuiBuoyancyImpulseSwitcher()
+	{
+		ImVec2 imguiSize = ImGui::GetWindowSize();
+
+		if (imguiIsBuoyancy)
+		{
+			isBuoyancy = true;
+			isImpulse = false;
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+			ImGui::SliderFloat("Buoyancy", &param.BUOYANCY, -3.f, 3.f);
+			ImGui::SameLine(imguiSize.x - (ImGui::CalcTextSize("Reset").x + ImGui::GetStyle().FramePadding.x * 2 + ImGui::GetFontSize()));
+			if (ImGui::Button("Reset##6"))
+			{
+				param.BUOYANCY = 1.0f;
+			}
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+			float fluidWeight = -param.FLUID_WEIGHT;
+			ImGui::SliderFloat("Fluid Weight", &fluidWeight, -1.5f, 1.5f);
+			param.FLUID_WEIGHT = -fluidWeight;
+			ImGui::SameLine(imguiSize.x - (ImGui::CalcTextSize("Reset").x + ImGui::GetStyle().FramePadding.x * 2 + ImGui::GetFontSize()));
+			if (ImGui::Button("Reset##7"))
+			{
+				param.FLUID_WEIGHT = 0.125f;
+			}
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+			ImGui::SliderFloat("Temperature", &param.TEMPERATURE, -373, 1000.f);
+			ImGui::SameLine(imguiSize.x - (ImGui::CalcTextSize("Reset").x + ImGui::GetStyle().FramePadding.x * 2 + ImGui::GetFontSize()));
+			if (ImGui::Button("Reset##8"))
+			{
+				param.TEMPERATURE = 12.f;
+			}
+		}
+		else
+		{
+			isBuoyancy = false;
+			isImpulse = true;
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+			float* impulseForce = glm::value_ptr(param.IMPULSE_FORCE);
+			ImGui::SliderFloat3("Force", impulseForce, -200.f, 200.0f);
+			param.IMPULSE_FORCE = glm::make_vec3(impulseForce);
+			ImGui::SameLine(imguiSize.x - (ImGui::CalcTextSize("Reset").x + ImGui::GetStyle().FramePadding.x * 2 + ImGui::GetFontSize()));
+			if (ImGui::Button("Reset##6"))
+			{
+				param.IMPULSE_FORCE = glm::vec3(0.f, 100.f, 0.0f);
+			}
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+			float* impulsePos = glm::value_ptr(param.IMPULSE_POSITION);
+			ImGui::SliderFloat3("Impulse pos", impulsePos, 0.0f, 1.0f);
+			param.IMPULSE_POSITION = glm::make_vec3(impulsePos);
+			ImGui::SameLine(imguiSize.x - (ImGui::CalcTextSize("Reset").x + ImGui::GetStyle().FramePadding.x * 2 + ImGui::GetFontSize()));
+			if (ImGui::Button("Reset##7"))
+			{
+				param.IMPULSE_POSITION = glm::vec3(0.5f, 0.2f, 0.5f);
+			}
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+			ImGui::SliderFloat("Impulse radius", &param.IMPULSE_RADIUS, 5.f, 25.f);
+			ImGui::SameLine(imguiSize.x - (ImGui::CalcTextSize("Reset").x + ImGui::GetStyle().FramePadding.x * 2 + ImGui::GetFontSize()));
+			if (ImGui::Button("Reset##8"))
+			{
+				param.IMPULSE_RADIUS = 12.0f;
+			}
+
+		}
 	}
 
 }

@@ -43,14 +43,43 @@ void main()
 
     vec3 vMask = vec3(1.f);
 
-    // If any of the neighbour cell contains an obstacle then mark it and use this cell to compute the gradient instead.
-    if (IsBoundaryCell(T, ivec3(-1, 0, 0))) { pLeft = pCenter; vMask.x = 0;}
-    if (IsBoundaryCell(T, ivec3(1, 0, 0))) { pRight = pCenter; vMask.x = 0;}
-    if (IsBoundaryCell(T, ivec3(0, -1, 0))) { pBottom = pCenter; vMask.y = 0;}
-    if (IsBoundaryCell(T, ivec3(0, 1, 0))) { pTop = pCenter; vMask.y = 0;}
-    if (IsBoundaryCell(T, ivec3(0, 0, -1))) { pBack = pCenter; vMask.z = 0;}
-    if (IsBoundaryCell(T, ivec3(0, 0, 1))) { pFront = pCenter; vMask.z = 0;}
 
+    /*  
+       Step and mix functions are used to avoid branching, functions are equivalent to the following if statement.
+       if (texelFetchOffset(obstacle, T, 0, ivec3(-1,0,0,)).x)
+       {
+           pLeft = pCenter;
+           vMask.x = 0.0f;
+       }
+    */
+    // If any of the neighbour cell contains an obstacle then mark it and use this cell to compute the gradient instead.
+    float stepLeft = step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(-1,0,0)).x);
+    pLeft = mix(pLeft, pCenter, stepLeft);
+    vMask.x = mix(1,0, stepLeft);
+
+    float stepRight = step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(1,0,0)).x);
+    pRight = mix(pRight, pCenter, stepRight);
+    vMask.x = mix(1,0, stepRight);
+
+    float stepBottom = step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(0,-1,0)).x);
+    pBottom = mix(pBottom, pCenter, stepBottom);
+    vMask.y = mix(1,0, stepBottom);
+
+    float stepTop = step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(0,1,0)).x);
+    pTop = mix(pTop, pCenter, stepTop);
+    vMask.y = mix(1,0, stepTop);
+
+    float stepBack = step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(0,0,-1)).x);
+    pBack = mix(pBack, pCenter, stepBack);
+    vMask.z = mix(1,0, stepBack);
+
+    float stepFront = step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(0,0,1)).x);
+    pFront = mix(pFront, pCenter, stepFront);
+    vMask.z = mix(1,0, stepFront);
+
+
+
+    // Subtracts pressure gradient from velocity to obtain final velocity.
     vec3 oldVel = texelFetch(velocity, T, 0).xyz;
     vec3 gradient = 0.5f *  vec3(pRight - pLeft, pTop - pBottom, pFront - pBack);
     vec3 newVel = oldVel - gradient;

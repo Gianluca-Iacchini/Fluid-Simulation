@@ -7,6 +7,7 @@
 #include "Core/Render/Model.h"
 #include "Core/Render/Cube.h"
 #include "Core/Render/Render.h"
+#include "Core/Render/Framebuffer.h"
 
 #include "Core/Node/Scene.h"
 #include "Core/Camera.h"
@@ -14,7 +15,6 @@
 #include <Core/Window.h>
 
 #include "Simulation/Fluid.h"
-#include "Simulation/FluidStep.h"
 
 
 // ---Entry Point-------------------

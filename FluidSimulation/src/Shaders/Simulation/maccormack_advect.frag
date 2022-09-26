@@ -45,7 +45,7 @@ void calcPhiMinMax(vec3 p) {
 
 }
 
-vec4 trilerp2(sampler3D sam, vec3 pos, vec3 inverseGridSize)
+vec4 trilerp(sampler3D sam, vec3 pos, vec3 inverseGridSize)
 {    
     vec3 uv = (floor(pos - 0.5f) + 0.5f) * inverseGridSize;
 
@@ -85,7 +85,7 @@ void main() {
 	
 	vec4 phiHatSample = texture(phi_hat, texCoords);
 	vec4 phiSample = texture(phi_n, texCoords);
-	vec4 phiHat1Sample = trilerp2(phi_hat_1, coord, 1.f / gridDimension);
+	vec4 phiHat1Sample = trilerp(phi_hat_1, coord, 1.f / gridDimension);
 
 	vec4 result = phiHat1Sample + 0.5 * (phiSample - phiHatSample);
 

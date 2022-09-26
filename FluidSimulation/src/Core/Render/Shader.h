@@ -1,4 +1,8 @@
 #pragma once
+/* 
+	Shader class from learnopengl.com
+	https://learnopengl.com/Getting-started/Shaders
+*/
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 

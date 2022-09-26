@@ -1,4 +1,5 @@
 #pragma once
+// Application entry point
 
 #ifdef FS_PLATFORM_WINDOWS
 

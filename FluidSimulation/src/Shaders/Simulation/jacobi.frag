@@ -41,15 +41,36 @@ void main()
     float pCenter = texelFetch(pressure, T, 0).x;
 
 
-    // If any of the neighbour cell contains an obstacle then use this cell to compute the pressure instead.
-    if (IsBoundaryCell(T, ivec3(-1, 0, 0))) pLeft = pCenter;
-    if (IsBoundaryCell(T, ivec3(1, 0, 0))) pRight = pCenter;
-    if (IsBoundaryCell(T, ivec3(0, -1, 0))) pBottom = pCenter;
-    if (IsBoundaryCell(T, ivec3(0, 1, 0))) pTop = pCenter;
-    if (IsBoundaryCell(T, ivec3(0, 0, -1))) pBack = pCenter;
-    if (IsBoundaryCell(T, ivec3(0, 0, 1))) pFront = pCenter;
+
+
+    /*  
+       Step and mix functions are used to avoid branching, functions are equivalent to the following if statement.
+       if (texelFetchOffset(obstacle, T, 0, ivec3(-1,0,0,)).x)
+       {
+           pLeft = pCenter;
+       }
+    */
+
+    float stepLeft = step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(-1,0,0)).x);
+    pLeft = mix(pLeft, pCenter, stepLeft);
+
+    float stepRight = step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(1,0,0)).x);
+    pRight = mix(pRight, pCenter, stepRight);
+
+    float stepBottom = step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(0,-1,0)).x);
+    pBottom = mix(pBottom, pCenter, stepBottom);
+
+    float stepTop = step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(0,1,0)).x);
+    pTop = mix(pTop, pCenter, stepTop);
+
+    float stepBack = step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(0,0,-1)).x);
+    pBack = mix(pBack, pCenter, stepBack);
+
+    float stepFront = step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(0,0,1)).x);
+    pFront = mix(pFront, pCenter, stepFront);
 
     float bC = texelFetch(divergence, T, 0).x;
     
+    // Computes this cell pressure by using the Poisson-pressure equation
     FragColor = (pLeft + pRight + pBottom + pTop + pFront + pBack - bC) / 6.0f;
 }

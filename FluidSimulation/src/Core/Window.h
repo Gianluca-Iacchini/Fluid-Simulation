@@ -5,6 +5,11 @@
 #include "Core/Core.h"
 #include "Events/Event.h"
 
+/*
+	Window class for window management from Hazel
+	https://github.com/TheCherno/Hazel
+*/
+
 namespace FluidSimulation
 {
 	struct WindowProps
@@ -13,7 +18,7 @@ namespace FluidSimulation
 		unsigned int Width;
 		unsigned int Height;
 
-		WindowProps(const std::string& title = "Fluid Simulation", unsigned int width = 1920, unsigned int height = 1080) : Title(title), Width(width), Height(height) {}
+		WindowProps(const std::string& title = "Fluid Simulation", unsigned int width = 1376, unsigned int height = 768) : Title(title), Width(width), Height(height) {}
 	};
 
 	class Window

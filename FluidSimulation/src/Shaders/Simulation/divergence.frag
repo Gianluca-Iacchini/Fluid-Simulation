@@ -18,7 +18,7 @@ bool IsBoundaryCell(ivec3 T, ivec3 offset)
     return (texelFetchOffset(obstacle, T, 0, offset).x == OBSTACLE_BOUNDARY);
 }
 
-// Computes velocity divergence
+// Computes velocity divergence using the discrete formula
 void main()
 {
     
@@ -32,13 +32,19 @@ void main()
     vec3 vFront =  texelFetchOffset(velocity, T, 0, ivec3(0, 0, 1)).xyz; 
 
 
-    // If any of the neighbour contains an obstacle then treat that cell as having velocity 0.
-    if (IsBoundaryCell(T, ivec3(-1, 0, 0))) vLeft = vec3(0);
-    if (IsBoundaryCell(T, ivec3(1, 0, 0))) vRight = vec3(0);
-    if (IsBoundaryCell(T, ivec3(0, -1, 0))) vBottom = vec3(0);
-    if (IsBoundaryCell(T, ivec3(0, 1, 0))) vTop = vec3(0);
-    if (IsBoundaryCell(T, ivec3(0, 0, -1))) vBack = vec3(0);
-    if (IsBoundaryCell(T, ivec3(0, 0, 1))) vFront = vec3(0);
+    /*  Mix functions is used to avoid branching, the assignments are equivalent to the following if statement.
+       if (texelFetchOffset(obstacle, T, 0, ivec3(-1,0,0,)).x)
+       {
+           vLeft = vec3(0);
+       }
+    */
+    vLeft = vLeft * (1.f - step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(-1,0,0)).x));
+    vRight = vRight * (1.f - step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(1,0,0)).x));
+    vBottom = vBottom * (1.f - step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(0,-1,0)).x));
+    vTop = vTop * (1.f - step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(0,1,0)).x));
+    vBack = vBack * (1.f - step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(0,0,-1)).x));
+    vFront = vFront * (1.f - step(0.3f, texelFetchOffset(obstacle, T, 0, ivec3(0,0,1)).x));
+
 
     float divergence = 0.5f * ((vRight.x - vLeft.x) + (vTop.y - vBottom.y) + (vFront.z - vBack.z));
     FragColor = divergence;

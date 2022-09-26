@@ -1,4 +1,9 @@
 #pragma once
+/* 
+	Mesh Function from learnopengl.com
+	https://learnopengl.com/Model-Loading/Mesh	
+*/
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

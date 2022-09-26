@@ -1,6 +1,13 @@
 #pragma once
 #include "Core/Window.h"
 #include <GLFW/glfw3.h>
+
+/*
+	Class for window management on Windows platform
+	https://github.com/TheCherno/Hazel
+*/
+
+
 namespace FluidSimulation
 {
 

@@ -1,5 +1,6 @@
 #pragma once
 
+/* Basic class for time management */
 namespace FluidSimulation {
 
 	class Time {

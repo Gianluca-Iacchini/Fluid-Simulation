@@ -1,5 +1,5 @@
 #pragma once
-
+// Simple component class for scene management
 
 
 namespace FluidSimulation {

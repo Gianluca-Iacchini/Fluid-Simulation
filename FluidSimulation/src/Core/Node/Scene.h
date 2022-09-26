@@ -5,6 +5,7 @@
 #include "Time.h"
 #include "Core/Application.h"
 
+/* Naive implementation of a scene class for scene management */
 namespace FluidSimulation
 {
 	class Scene

@@ -10,7 +10,7 @@ in vec3 cellCoords;
 // Velocity
 uniform sampler3D w;
 
-// Computes velocity curl
+// Computes velocity curl using the discrete formula
 void main()
 {
 

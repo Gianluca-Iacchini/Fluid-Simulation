@@ -1,5 +1,9 @@
 #pragma once
 
+/*
+// Key Event class from Hazel Engine https://github.com/TheCherno/Hazel
+// This class handles mouse events from the GLFW callbacks.
+*/
 
 #include "Event.h"
 

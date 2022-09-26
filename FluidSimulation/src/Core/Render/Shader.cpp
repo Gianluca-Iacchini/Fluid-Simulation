@@ -1,6 +1,10 @@
 #include "fspch.h"
 #include "Shader.h"
 
+/*
+	Shader class from learnopengl.com
+	https://learnopengl.com/Getting-started/Shaders
+*/
 
 namespace FluidSimulation {
 	Shader::Shader(const char* vertexFileName, const char* fragmentFileName, const char* geometryFileName)

@@ -3,7 +3,7 @@
 #include "Core/Time.h"
 #include <btBulletDynamicsCommon.h>
 
-
+/* Simple wrapper class for Bullet3 */
 namespace FluidSimulation {
 
     enum Shape { BOX, SPHERE };

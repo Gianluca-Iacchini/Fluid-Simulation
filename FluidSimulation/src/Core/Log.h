@@ -1,5 +1,11 @@
 #pragma once
 
+/*
+	spdlog wrapper function for Log management from Hazel
+	https://github.com/TheCherno/Hazel
+*/
+
+
 #include "Core.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"

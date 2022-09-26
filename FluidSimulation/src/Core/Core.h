@@ -1,4 +1,5 @@
 #pragma once
+// Core defines for development
 
 #ifdef FS_PLATFORM_WINDOWS
 	#ifdef FS_BUILD_DLL

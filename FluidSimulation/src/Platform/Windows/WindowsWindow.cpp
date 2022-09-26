@@ -1,10 +1,20 @@
 #include "fspch.h"
+
+#include "imgui.h"
+#include "Platform/OpenGL/imgui_impl_glfw.h"
+#include "Platform/OpenGL/imgui_impl_opengl3.h"
+
 #include "WindowsWindow.h"
 
 #include "Core/Events/ApplicationEvent.h"
 #include "Core/Events/MouseEvent.h"
 #include "Core/Events/KeyEvent.h"
 #include <glad/glad.h>
+
+/*
+	Class for window management on Windows platform
+	https://github.com/TheCherno/Hazel
+*/
 
 namespace FluidSimulation
 {
@@ -30,6 +40,7 @@ namespace FluidSimulation
 		Shutdown();
 	}
 
+	// Window Initialization function
 	void WindowsWindow::Init(const WindowProps& props)
 	{
 		m_Data.Title = props.Title;
@@ -38,6 +49,7 @@ namespace FluidSimulation
 
 		FS_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
+		// Initialize GLFW
 		if (!s_GLFWInitialized)
 		{
 			int success = glfwInit();
@@ -54,6 +66,7 @@ namespace FluidSimulation
 			glfwSetWindowUserPointer(m_Window, &m_Data);
 			SetVSync(true);
 
+			// Assing callbacks
 			glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
@@ -135,6 +148,14 @@ namespace FluidSimulation
 				MouseMovedEvent event((float)xPos, (float)yPos);
 				data.EventCallback(event);
 			});
+
+			//IMGUI INITIALIZATION
+			IMGUI_CHECKVERSION();
+			ImGui::CreateContext();
+			ImGuiIO& io = ImGui::GetIO(); (void)io;
+			ImGui::StyleColorsDark();
+			ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
+			ImGui_ImplOpenGL3_Init("#version 410");
 
 		}
 	}
