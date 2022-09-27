@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FS_PLATFORM_WINDOWS;FS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FluidSimulation\vendor\spdlog\include;..\FluidSimulation\vendor;..\FluidSimulation\src;..\FluidSimulation\vendor\glm;..\FluidSimulation\vendor\GLFW\include;..\FluidSimulation\vendor\Glad\include;..\FluidSimulation\vendor\assimp;..\FluidSimulation\vendor\stb_image;..\FluidSimulation\vendor\bullet3\src;..\FluidSimulation\vendor\bullet3\src\Bullet3Common;..\FluidSimulation\vendor\bullet3\src\Bullet3Collision;..\FluidSimulation\vendor\bullet3\src\BulletCollision;..\FluidSimulation\vendor\bullet3\src\Bullet3Dynamics;..\FluidSimulation\vendor\bullet3\src\BulletDynamics;..\FluidSimulation\vendor\bullet3\src\LinearMath;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\FluidSimulation\vendor\spdlog\include;..\FluidSimulation\vendor;..\FluidSimulation\src;..\FluidSimulation\vendor\glm;..\FluidSimulation\vendor\GLFW\include;..\FluidSimulation\vendor\Glad\include;..\FluidSimulation\vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -95,7 +95,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FS_PLATFORM_WINDOWS;FS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FluidSimulation\vendor\spdlog\include;..\FluidSimulation\vendor;..\FluidSimulation\src;..\FluidSimulation\vendor\glm;..\FluidSimulation\vendor\GLFW\include;..\FluidSimulation\vendor\Glad\include;..\FluidSimulation\vendor\assimp;..\FluidSimulation\vendor\stb_image;..\FluidSimulation\vendor\bullet3\src;..\FluidSimulation\vendor\bullet3\src\Bullet3Common;..\FluidSimulation\vendor\bullet3\src\Bullet3Collision;..\FluidSimulation\vendor\bullet3\src\BulletCollision;..\FluidSimulation\vendor\bullet3\src\Bullet3Dynamics;..\FluidSimulation\vendor\bullet3\src\BulletDynamics;..\FluidSimulation\vendor\bullet3\src\LinearMath;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\FluidSimulation\vendor\spdlog\include;..\FluidSimulation\vendor;..\FluidSimulation\src;..\FluidSimulation\vendor\glm;..\FluidSimulation\vendor\GLFW\include;..\FluidSimulation\vendor\Glad\include;..\FluidSimulation\vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -115,7 +115,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FS_PLATFORM_WINDOWS;FS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\FluidSimulation\vendor\spdlog\include;..\FluidSimulation\vendor;..\FluidSimulation\src;..\FluidSimulation\vendor\glm;..\FluidSimulation\vendor\GLFW\include;..\FluidSimulation\vendor\Glad\include;..\FluidSimulation\vendor\assimp;..\FluidSimulation\vendor\stb_image;..\FluidSimulation\vendor\bullet3\src;..\FluidSimulation\vendor\bullet3\src\Bullet3Common;..\FluidSimulation\vendor\bullet3\src\Bullet3Collision;..\FluidSimulation\vendor\bullet3\src\BulletCollision;..\FluidSimulation\vendor\bullet3\src\Bullet3Dynamics;..\FluidSimulation\vendor\bullet3\src\BulletDynamics;..\FluidSimulation\vendor\bullet3\src\LinearMath;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\FluidSimulation\vendor\spdlog\include;..\FluidSimulation\vendor;..\FluidSimulation\src;..\FluidSimulation\vendor\glm;..\FluidSimulation\vendor\GLFW\include;..\FluidSimulation\vendor\Glad\include;..\FluidSimulation\vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

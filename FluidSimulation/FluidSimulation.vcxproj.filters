@@ -13,9 +13,6 @@
     <Filter Include="src\Core\Node">
       <UniqueIdentifier>{7A0D7B55-E6CD-F68B-AF08-40091B883B68}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Core\Physics">
-      <UniqueIdentifier>{17AC243A-03A5-438C-2CD7-2811182F2398}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Core\Render">
       <UniqueIdentifier>{748619A9-E011-876D-E922-0A62552DE36D}</UniqueIdentifier>
     </Filter>
@@ -126,9 +123,6 @@
     <ClInclude Include="src\Core\Node\Transform.h">
       <Filter>src\Core\Node</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Physics\Physics.h">
-      <Filter>src\Core\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\Render\Cube.h">
       <Filter>src\Core\Render</Filter>
     </ClInclude>
@@ -150,10 +144,7 @@
     <ClInclude Include="src\Core\Render\Shader.h">
       <Filter>src\Core\Render</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Render\Text.h">
-      <Filter>src\Core\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\TIME.H">
+    <ClInclude Include="src\Core\Time.h">
       <Filter>src\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Window.h">
@@ -1454,9 +1445,6 @@
     <ClCompile Include="src\Core\Node\Transform.cpp">
       <Filter>src\Core\Node</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Physics\Physics.cpp">
-      <Filter>src\Core\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\Render\Cubemap.cpp">
       <Filter>src\Core\Render</Filter>
     </ClCompile>
@@ -1467,9 +1455,6 @@
       <Filter>src\Core\Render</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Render\Shader.cpp">
-      <Filter>src\Core\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\Render\Text.cpp">
       <Filter>src\Core\Render</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Time.cpp">

@@ -42,12 +42,13 @@ namespace FluidSimulation {
 
         void ImGuiControlWindowUpdate();
         void ImGuiBuoyancyImpulseSwitcher();
-
+        void ImGuiCalcFPS();
 
         glm::vec2 screenSize = glm::vec2(1280, 720);
 
         struct fluid_param
         {
+            int JACOBI_ITERATIONS = 100;
             float DISSIPATION = 1.f;
             float VORTICITY = 0.35f;
             float BUOYANCY = 1.0f;
@@ -111,6 +112,8 @@ namespace FluidSimulation {
         bool isImpulse = false;
         bool isImpulseDye = true;
         bool isBuoyancy = true;
+        int fps = 0;
+        float lastTime = 0.f;
 
         unsigned int boxVAO;
         unsigned int boxVBO;

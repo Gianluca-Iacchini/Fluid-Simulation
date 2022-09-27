@@ -16,29 +16,12 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "FluidSimulation/vendor/GLFW/include"
 IncludeDir["Glad"] = "FluidSimulation/vendor/Glad/include"
 IncludeDir["glm"] = "FluidSimulation/vendor/glm"
-IncludeDir["assimp"] = "FluidSimulation/vendor/assimp"
 IncludeDir["stb_image"] = "FluidSimulation/vendor/stb_image"
 IncludeDir["ImGui"] = "FluidSimulation/vendor/imgui"
-IncludeDir["bullet3"] = "FluidSimulation/vendor/bullet3/src"
-IncludeDir["Bullet3Common"] = "FluidSimulation/vendor/bullet3/src/Bullet3Common"
-IncludeDir["Bullet3Collision"] = "FluidSimulation/vendor/bullet3/src/Bullet3Collision"
-IncludeDir["BulletCollision"] = "FluidSimulation/vendor/bullet3/src/BulletCollision"
-IncludeDir["Bullet3Dynamics"] = "FluidSimulation/vendor/bullet3/src/Bullet3Dynamics"
-IncludeDir["BulletDynamics"] = "FluidSimulation/vendor/bullet3/src/BulletDynamics"
-IncludeDir["LinearMath"] = "FluidSimulation/vendor/bullet3/src/LinearMath"
-IncludeDir["FreeType"] = "FluidSimulation/vendor/freetype"
 
 include "FluidSimulation/vendor/GLFW"
 include "FluidSimulation/vendor/Glad"
 include "FluidSimulation/vendor/imgui"
-include "FluidSimulation/vendor/assimp"
-include "FluidSimulation/vendor/bullet3/src/Bullet3Collision"
-include "FluidSimulation/vendor/bullet3/src/BulletCollision"
-include "FluidSimulation/vendor/bullet3/src/Bullet3Dynamics"
-include "FluidSimulation/vendor/bullet3/src/BulletDynamics"
-include "FluidSimulation/vendor/bullet3/src/Bullet3Common"
-include "FluidSimulation/vendor/bullet3/src/LinearMath"
-include "FluidSimulation/vendor/freetype"
 
 project "FluidSimulation"
 	location "FluidSimulation"
@@ -74,15 +57,6 @@ project "FluidSimulation"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.bullet3}",
-		"%{IncludeDir.Bullet3Common}",
-		"%{IncludeDir.Bullet3Collision}",
-		"%{IncludeDir.BulletCollision}",
-		"%{IncludeDir.Bullet3Dynamics}",
-		"%{IncludeDir.BulletDynamics}",
-		"%{IncludeDir.LinearMath}",
-		"%{IncludeDir.assimp}",
-		"%{IncludeDir.FreeType}",
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.ImGui}",
 	}
@@ -92,15 +66,7 @@ project "FluidSimulation"
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"Assimp",
-		"FreeType",
 		"opengl32.lib",
-		"Bullet3Collision",
-		"BulletCollision",
-		"Bullet3Dynamics",
-		"BulletDynamics",
-		"Bullet3Common",
-		"LinearMath",
 	}
 
 	filter "system:windows"
@@ -157,15 +123,7 @@ project "Sandbox"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.assimp}",
 		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.bullet3}",
-		"%{IncludeDir.Bullet3Common}",
-		"%{IncludeDir.Bullet3Collision}",
-		"%{IncludeDir.BulletCollision}",
-		"%{IncludeDir.Bullet3Dynamics}",
-		"%{IncludeDir.BulletDynamics}",
-		"%{IncludeDir.LinearMath}",
 	}
 
 	links

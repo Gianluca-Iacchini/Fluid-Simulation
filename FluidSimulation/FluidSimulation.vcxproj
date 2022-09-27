@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>fspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FS_PLATFORM_WINDOWS;FS_BUILD_DLL;GLFW_INCLUDE_NONE;FS_DEBUG;FS_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\bullet3\src;vendor\bullet3\src\Bullet3Common;vendor\bullet3\src\Bullet3Collision;vendor\bullet3\src\BulletCollision;vendor\bullet3\src\Bullet3Dynamics;vendor\bullet3\src\BulletDynamics;vendor\bullet3\src\LinearMath;vendor\assimp;vendor\freetype;vendor\stb_image;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\stb_image;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -97,7 +97,7 @@
       <PrecompiledHeaderFile>fspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FS_PLATFORM_WINDOWS;FS_BUILD_DLL;GLFW_INCLUDE_NONE;FS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\bullet3\src;vendor\bullet3\src\Bullet3Common;vendor\bullet3\src\Bullet3Collision;vendor\bullet3\src\BulletCollision;vendor\bullet3\src\Bullet3Dynamics;vendor\bullet3\src\BulletDynamics;vendor\bullet3\src\LinearMath;vendor\assimp;vendor\freetype;vendor\stb_image;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\stb_image;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -121,7 +121,7 @@
       <PrecompiledHeaderFile>fspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FS_PLATFORM_WINDOWS;FS_BUILD_DLL;GLFW_INCLUDE_NONE;FS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\bullet3\src;vendor\bullet3\src\Bullet3Common;vendor\bullet3\src\Bullet3Collision;vendor\bullet3\src\BulletCollision;vendor\bullet3\src\Bullet3Dynamics;vendor\bullet3\src\BulletDynamics;vendor\bullet3\src\LinearMath;vendor\assimp;vendor\freetype;vendor\stb_image;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor;vendor\GLFW\include;vendor\Glad\include;vendor\glm;vendor\stb_image;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -158,7 +158,6 @@
     <ClInclude Include="src\Core\Node\Node.h" />
     <ClInclude Include="src\Core\Node\Scene.h" />
     <ClInclude Include="src\Core\Node\Transform.h" />
-    <ClInclude Include="src\Core\Physics\Physics.h" />
     <ClInclude Include="src\Core\Render\Cube.h" />
     <ClInclude Include="src\Core\Render\Cubemap.h" />
     <ClInclude Include="src\Core\Render\Framebuffer.h" />
@@ -166,8 +165,7 @@
     <ClInclude Include="src\Core\Render\Model.h" />
     <ClInclude Include="src\Core\Render\Render.h" />
     <ClInclude Include="src\Core\Render\Shader.h" />
-    <ClInclude Include="src\Core\Render\Text.h" />
-    <ClInclude Include="src\Core\TIME.H" />
+    <ClInclude Include="src\Core\Time.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\FluidSimulation.h" />
     <ClInclude Include="src\Platform\OpenGL\imgui_impl_glfw.h" />
@@ -602,12 +600,10 @@
     <ClCompile Include="src\Core\Node\Node.cpp" />
     <ClCompile Include="src\Core\Node\Scene.cpp" />
     <ClCompile Include="src\Core\Node\Transform.cpp" />
-    <ClCompile Include="src\Core\Physics\Physics.cpp" />
     <ClCompile Include="src\Core\Render\Cubemap.cpp" />
     <ClCompile Include="src\Core\Render\Framebuffer.cpp" />
     <ClCompile Include="src\Core\Render\Render.cpp" />
     <ClCompile Include="src\Core\Render\Shader.cpp" />
-    <ClCompile Include="src\Core\Render\Text.cpp" />
     <ClCompile Include="src\Core\Time.cpp" />
     <ClCompile Include="src\Platform\OpenGL\imgui_impl_glfw.cpp" />
     <ClCompile Include="src\Platform\OpenGL\imgui_impl_opengl3.cpp" />
@@ -656,30 +652,6 @@
     </ProjectReference>
     <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
-    </ProjectReference>
-    <ProjectReference Include="vendor\assimp\Assimp.vcxproj">
-      <Project>{5234E0A7-3ED6-0A7E-2791-1ED213D291CE}</Project>
-    </ProjectReference>
-    <ProjectReference Include="vendor\freetype\FreeType.vcxproj">
-      <Project>{49610F50-352E-6A5B-5E47-58034A739FE9}</Project>
-    </ProjectReference>
-    <ProjectReference Include="vendor\bullet3\src\Bullet3Collision\Bullet3Collision.vcxproj">
-      <Project>{EC30BEF4-D829-DD46-015C-C2CBEDB3BC52}</Project>
-    </ProjectReference>
-    <ProjectReference Include="vendor\bullet3\src\BulletCollision\BulletCollision.vcxproj">
-      <Project>{B91153C5-259D-C089-2EAE-437E9AB81C8A}</Project>
-    </ProjectReference>
-    <ProjectReference Include="vendor\bullet3\src\Bullet3Dynamics\Bullet3Dynamics.vcxproj">
-      <Project>{189748BB-8422-B67F-8D33-3974F93D1280}</Project>
-    </ProjectReference>
-    <ProjectReference Include="vendor\bullet3\src\BulletDynamics\BulletDynamics.vcxproj">
-      <Project>{45122E0F-31E0-2115-1A74-923B06E1FD79}</Project>
-    </ProjectReference>
-    <ProjectReference Include="vendor\bullet3\src\Bullet3Common\Bullet3Common.vcxproj">
-      <Project>{A9326E37-15F3-E96D-DE2D-33EB4AAD2E4A}</Project>
-    </ProjectReference>
-    <ProjectReference Include="vendor\bullet3\src\LinearMath\LinearMath.vcxproj">
-      <Project>{EAF25DFD-D6AA-9F4A-3FB2-78A62B893A3B}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -15,7 +15,7 @@
 using namespace std;
 
 namespace FluidSimulation {
-
+	
 	struct Vertex {
 		glm::vec3 Position;
 		glm::vec3 Normal;

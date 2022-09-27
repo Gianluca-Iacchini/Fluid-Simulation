@@ -9,6 +9,7 @@
 #include "Core/Application.h"
 #include "Core/Input.h"
 #include "glm/gtc/type_ptr.hpp"
+#include "Core/Node/Scene.h"
 
 namespace FluidSimulation {
 
@@ -475,7 +476,7 @@ namespace FluidSimulation {
         /////////////////// PRESSURE //////////////////////
         ///////////////////////////////////////////////////
 
-        JacobiPressure(100, param.PRESSURE);
+        JacobiPressure(param.JACOBI_ITERATIONS, param.PRESSURE);
 
         //////////////////////////////////////////////////////////////
         //////////////////////////// Gradient Subtraction ////////////
@@ -700,7 +701,7 @@ namespace FluidSimulation {
 		
 		glm::vec2 windowSize = screenSize;
 
-		int totalItems = imguiIsBuoyancy ? 15 : 15;
+		int totalItems = imguiIsBuoyancy ? 18 : 18;
 		windowSize.x = screenSize.x < 1920 ? windowSize.x / 2.6f : windowSize.x / 3.5f;
 
 		float itemsHeight = totalItems * (ImGui::CalcTextSize("Reset").y + ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2) + totalItems * 3.f;
@@ -714,6 +715,11 @@ namespace FluidSimulation {
 		
 		ImGui::Begin("Fluid simulation control values", 0, ImGuiWindowFlags_NoResize);
 
+
+
+		ImGui::Text("[TAB] To toggle mouse Cursor");
+
+		ImGuiCalcFPS();
 
 		ImVec2 imguiSize = ImGui::GetWindowSize();
 
@@ -907,6 +913,38 @@ namespace FluidSimulation {
 			}
 
 		}
+	}
+
+	void Fluid::ImGuiCalcFPS()
+	{
+
+		float fps = ImGui::GetIO().Framerate;
+
+		std::string fpsString = "FPS: " + std::to_string(fps);
+
+		ImGui::Text("INFO:");
+
+
+		const GLubyte* renderer = glGetString(GL_RENDERER);
+		
+		char* gpuName = "?";
+		if (renderer)
+			gpuName = (char*)renderer;
+
+		ImGui::Text("GPU: %s", gpuName);
+
+		ImGui::Text("FPS: %.2g", fps);
+
+		ImGui::SameLine(ImGui::CalcTextSize("FPS: 00	").x + ImGui::GetStyle().ItemSpacing.x);
+
+		ImGui::Text("Latency: %.2fms", 1000.f / fps);
+		
+		ImGui::Text("Resolution: %ix%i", (int)screenSize.x, (int)screenSize.y);
+
+		ImGui::SameLine(ImGui::CalcTextSize("Resolution: 1000x%1000").x + ImGui::GetStyle().ItemSpacing.x);
+
+		ImGui::Text("Jacobi Iterations: %i", param.JACOBI_ITERATIONS);
+
 	}
 
 }

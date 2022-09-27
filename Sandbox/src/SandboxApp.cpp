@@ -1,7 +1,6 @@
 #include <FluidSimulation.h>
 #include "Core/Events/MouseEvent.h"
 #include "Core/Render/Cubemap.h"
-#include "Core/Render/Text.h"
 
 using namespace FluidSimulation;
 
@@ -70,11 +69,8 @@ public:
 			"..\\FluidSimulation\\res\\Cubemaps\\back.jpg"
 		};
 
-		cubeMap = new Cubemap(cubeMapFaces);
+		//cubeMap = new Cubemap(cubeMapFaces);
 
-		// Initialize fps text
-		text = new Text("FPS: 0\nFRAME TIME: 0ms", -0.95, 0.87, 32);
-		text->SetColor(glm::vec4(1, 1, 0, 1));
 	}
 
 	// Called once every frame
@@ -95,9 +91,9 @@ public:
 		fluid.DrawDepthBuffer();
 
 		// Render cubemap
-		glDisable(GL_DEPTH_TEST);
-		cubeMap->Render();
-		glEnable(GL_DEPTH_TEST);
+		//glDisable(GL_DEPTH_TEST);
+		//cubeMap->Render();
+		//glEnable(GL_DEPTH_TEST);
 
 		// Update scene
 		initialScene->Update();
@@ -109,20 +105,8 @@ public:
 		fluid.Update(deltaTime);
 
 		// Update fps text value
-		float currentTime = initialScene->time.getCurrentTime();
-		fps++;
 
-		if (currentTime - lastTime >= 1.0f)
-		{
-			std::string num_text = std::to_string(1000.f / fps);
-			std::string rounded = num_text.substr(0, num_text.find(".") + 4);
-			text->SetText("FPS: " + std::to_string(fps) + "\nFRAME TIME: " + rounded + std::string("ms"));
 
-			fps = 0;
-			lastTime = currentTime;
-		}
-
-		text->Render();
 	}
 
 	void OnEvent(FluidSimulation::Event& event) override
@@ -134,7 +118,6 @@ private:
 	Scene* initialScene = nullptr;
 	Fluid fluid;
 	Cubemap* cubeMap;
-	Text* text;
 	float lastTime = 0.f;
 	unsigned int fps = 0;
 };

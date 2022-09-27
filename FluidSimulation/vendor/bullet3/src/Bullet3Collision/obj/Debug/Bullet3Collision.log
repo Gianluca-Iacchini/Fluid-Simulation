@@ -1,8 +1,0 @@
-﻿  b3DynamicBvh.cpp
-  b3DynamicBvhBroadphase.cpp
-  b3OverlappingPairCache.cpp
-  b3ConvexUtility.cpp
-C:\Users\iacco\Desktop\FluidSimulation\FluidSimulation\FluidSimulation\vendor\bullet3\src\Bullet3Common\b3HashMap.h(43,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-  b3CpuNarrowPhase.cpp
-  Generating Code...
-  Bullet3Collision.vcxproj -> C:\Users\iacco\Desktop\FluidSimulation\FluidSimulation\FluidSimulation\vendor\bullet3\src\Bullet3Collision\bin\Debug\Bullet3Collision.lib

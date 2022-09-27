@@ -1,8 +1,0 @@
-﻿  b3FixedConstraint.cpp
-  b3Generic6DofConstraint.cpp
-  b3PgsJacobiSolver.cpp
-  b3Point2PointConstraint.cpp
-  b3TypedConstraint.cpp
-  b3CpuRigidBodyPipeline.cpp
-  Generating Code...
-  Bullet3Dynamics.vcxproj -> C:\Users\iacco\Desktop\FluidSimulation\FluidSimulation\FluidSimulation\vendor\bullet3\src\Bullet3Dynamics\bin\Debug\Bullet3Dynamics.lib

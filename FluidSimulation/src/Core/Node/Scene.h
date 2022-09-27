@@ -1,8 +1,7 @@
 #pragma once
 #include "Node.h"
-#include "Core/Physics/Physics.h"
 #include <vector>
-#include "Time.h"
+#include "Core/Time.H"
 #include "Core/Application.h"
 
 /* Naive implementation of a scene class for scene management */
@@ -11,7 +10,6 @@ namespace FluidSimulation
 	class Scene
 	{
 	public:
-		Physics* physics;
 		Application* application;
 
 		static Scene* currentScene;

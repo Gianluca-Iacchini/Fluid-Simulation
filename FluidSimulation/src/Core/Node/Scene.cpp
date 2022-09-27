@@ -8,14 +8,12 @@ namespace FluidSimulation {
 	// Create a scene for Application *app
 	Scene::Scene(Application* app) : application(app)
 	{
-		physics = new Physics(time);
 	}
 
 	// Update is called every frame
 	void Scene::Update()
 	{
 		time.Update();
-		physics->Update();
 		for (Node* node : sceneNodes)
 		{
 			node->Update();
