@@ -10,29 +10,21 @@ namespace FluidSimulation {
 	{
 	public:
 
-		typedef struct PingPongFramebuffer
-		{
-			Framebuffer* readFBO;
-			Framebuffer* writeFBO;
-
-		} PingPongFramebuffer;
+		Framebuffer();
 
 		Framebuffer(GLsizei width, GLsizei height, GLsizei depth, int nComponents);
 		Framebuffer(glm::vec3 size, int nComponents);
 
 		Framebuffer(GLsizei width, GLsizei height, int nComponents);
 		Framebuffer(glm::vec2 size, int nComponents);
-
-		static void Swap(PingPongFramebuffer& ppFBO);
 		
-		static PingPongFramebuffer CreateDoubleFramebuffer(Framebuffer fbo);
-		static PingPongFramebuffer CreateDoubleFramebuffer(glm::vec3 size, int nComponents);
-		static PingPongFramebuffer CreateDoubleFramebuffer(glm::vec2 size, int nComponents);
+
 
 		inline GLuint GetFramebufferHandle() { return FBOHandle; }
 		inline GLuint GetColorTextureHandle() { return colorTextureHandle; }
 		inline GLuint GetDepthTextureHandle() { return depthTextureHandle; }
 		inline GLenum GetFramebufferDimension() { return framebufferDim; }
+		inline int GetFramebufferNComponents() { return nComponents; }
 
 		inline glm::vec3 GetFramebufferSize() { return glm::vec3(width, height, depth); }
 
@@ -55,6 +47,25 @@ namespace FluidSimulation {
 
 
 	};
+
+	typedef struct PingPongFramebuffer
+	{
+		Framebuffer readFBO;
+		Framebuffer writeFBO;
+
+		void Swap()
+		{
+			Framebuffer temp = readFBO;
+			readFBO = writeFBO;
+			writeFBO = temp;
+		}
+
+		PingPongFramebuffer();
+		PingPongFramebuffer (Framebuffer fbo);
+		PingPongFramebuffer (glm::vec3 size, int nComponents);
+		PingPongFramebuffer (glm::vec2 size, int nComponents);
+
+	} PingPongFramebuffer;
 }
 
 

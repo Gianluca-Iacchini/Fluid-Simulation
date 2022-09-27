@@ -5,6 +5,18 @@
 
 namespace FluidSimulation {
 
+	Framebuffer::Framebuffer()
+	{
+		this->FBOHandle = -1;
+		this->colorTextureHandle = -1;
+		this->framebufferDim = -1;
+
+		this->width = 0;
+		this->height = 0;
+		this->depth = 0;
+		this->nComponents = 0;
+	}
+
 	// Initialize a 3D framebuffer with width width, height height and depth depth and nComponents components.
 	Framebuffer::Framebuffer(GLsizei width, GLsizei height, GLsizei depth, int nComponents)
 	{
@@ -146,55 +158,52 @@ namespace FluidSimulation {
 		this->nComponents = nComponents;
 	}
 
-	// Swap PingPongFramebuffer buffers;
-	void Framebuffer::Swap(PingPongFramebuffer& ppFBO)
+	PingPongFramebuffer::PingPongFramebuffer()
 	{
-		Framebuffer* temp = ppFBO.readFBO;
-		ppFBO.readFBO = ppFBO.writeFBO;
-		ppFBO.writeFBO = temp;
+		this->readFBO = Framebuffer();
+		this->writeFBO = Framebuffer();
 	}
 
 	// Create a PingPongFramebuffer by creating two framebuffers with fbo nComponents, width, height and depth (if 3D)
-	Framebuffer::PingPongFramebuffer Framebuffer::CreateDoubleFramebuffer(Framebuffer fbo)
+	PingPongFramebuffer::PingPongFramebuffer(Framebuffer fbo)
 	{
-		GLsizei width = fbo.width;
-		GLsizei height = fbo.height;
-		
-		GLenum fboDim = fbo.framebufferDim;
-		int nComponents = fbo.nComponents;
+		glm::vec3 fboSize = fbo.GetFramebufferSize();
 
-		Framebuffer* readFBO;
-		Framebuffer* writeFBO;
+		GLsizei width = fboSize.x;
+		GLsizei height = fboSize.y;
+		
+		GLenum fboDim = fbo.GetFramebufferDimension();
+
+		int nComponents = fbo.GetFramebufferNComponents();
+
 
 		if (fboDim == GL_TEXTURE_3D)
 		{
-			GLsizei depth = fbo.depth;
-			readFBO = new Framebuffer(width, height, depth, nComponents);
-			writeFBO = new Framebuffer(width, height, depth, nComponents);
+			GLsizei depth = fboSize.z;
+			this->readFBO = Framebuffer(width, height, depth, nComponents);
+			this->writeFBO = Framebuffer(width, height, depth, nComponents);
+
 		}
 		else 
 		{
-			readFBO = new Framebuffer(width, height, nComponents);
-			writeFBO = new Framebuffer(width, height, nComponents);
+			this->readFBO = Framebuffer(width, height, nComponents);
+			this->writeFBO = Framebuffer(width, height, nComponents);
 		}
-
-
-		PingPongFramebuffer ppfbo = { readFBO, writeFBO };
-		return ppfbo;
 	}
 
 	// Create a 3D PingPongFramebbufer by creating two framebuffers with size size and nComponents nComponents
-	Framebuffer::PingPongFramebuffer Framebuffer::CreateDoubleFramebuffer(glm::vec3 size, int nComponents)
+	PingPongFramebuffer::PingPongFramebuffer(glm::vec3 size, int nComponents)
 	{
-		PingPongFramebuffer ppfbo = { new Framebuffer(size, nComponents), new Framebuffer(size, nComponents) };
-		return ppfbo;
+		this->writeFBO = Framebuffer(size, nComponents);
+		this->readFBO = Framebuffer(size, nComponents);
 	}
+	
 
 	// Create a 2D PingPongFramebbufer by creating two framebuffers with size size and nComponents nComponents
-	Framebuffer::PingPongFramebuffer Framebuffer::CreateDoubleFramebuffer(glm::vec2 size, int nComponents)
+	PingPongFramebuffer::PingPongFramebuffer(glm::vec2 size, int nComponents)
 	{
-		PingPongFramebuffer ppfbo = { new Framebuffer(size, nComponents), new Framebuffer(size, nComponents) };
-		return ppfbo;
+		this->writeFBO = Framebuffer(size, nComponents);
+		this->readFBO = Framebuffer(size, nComponents);
 	}
 	
 	// Attach depth texture to an existing framebuffer

@@ -24,41 +24,41 @@ namespace FluidSimulation {
 		this->gridDimension = gridDimension;
 
 
-		advectionProgram = new Shader("Simulation/basicFluid.vert", "Simulation/advection.frag", "Simulation/layeredRender.geom");
-		macCormackAdvectionProgram = new Shader("Simulation/basicFluid.vert", "Simulation/maccormack_advect.frag", "Simulation/layeredRender.geom");
-		divergenceProgram = new Shader("Simulation/basicFluid.vert", "Simulation/divergence.frag", "Simulation/layeredRender.geom");
-		curlProgram = new Shader("Simulation/basicFluid.vert", "Simulation/curl.frag", "Simulation/layeredRender.geom");
-		gradientSubtractionProgram = new Shader("Simulation/basicFluid.vert", "Simulation/gradientSubtraction.frag", "Simulation/layeredRender.geom");
-		buoyancyProgram = new Shader("Simulation/basicFluid.vert", "Simulation/buoyancy.frag", "Simulation/layeredRender.geom");
-		clearProgram = new Shader("Simulation/basicFluid.vert", "Simulation/clearTexture.frag", "Simulation/layeredRender.geom");
-		pressureProgram = new Shader("Simulation/basicFluid.vert", "Simulation/jacobi.frag", "Simulation/layeredRender.geom");
-		diffuseProgram = new Shader("Simulation/basicFluid.vert", "Simulation/jacobi.frag", "Simulation/layeredRender.geom");
-		vorticityProgram = new Shader("Simulation/basicFluid.vert", "Simulation/vorticity.frag", "Simulation/layeredRender.geom");
-		boundaryProgram = new Shader("Simulation/basicFluid.vert", "Simulation/obstacleBounds.frag", "Simulation/layeredRender.geom");
-		splatProgram = new Shader("Simulation/basicFluid.vert", "Simulation/splat.frag", "Simulation/layeredRender.geom");
+		advectionProgram = Shader("Simulation/basicFluid.vert", "Simulation/advection.frag", "Simulation/layeredRender.geom");
+		macCormackAdvectionProgram = Shader("Simulation/basicFluid.vert", "Simulation/maccormack_advect.frag", "Simulation/layeredRender.geom");
+		divergenceProgram = Shader("Simulation/basicFluid.vert", "Simulation/divergence.frag", "Simulation/layeredRender.geom");
+		curlProgram =  Shader("Simulation/basicFluid.vert", "Simulation/curl.frag", "Simulation/layeredRender.geom");
+		gradientSubtractionProgram = Shader("Simulation/basicFluid.vert", "Simulation/gradientSubtraction.frag", "Simulation/layeredRender.geom");
+		buoyancyProgram = Shader("Simulation/basicFluid.vert", "Simulation/buoyancy.frag", "Simulation/layeredRender.geom");
+		clearProgram =  Shader("Simulation/basicFluid.vert", "Simulation/clearTexture.frag", "Simulation/layeredRender.geom");
+		pressureProgram = Shader("Simulation/basicFluid.vert", "Simulation/jacobi.frag", "Simulation/layeredRender.geom");
+		diffuseProgram = Shader("Simulation/basicFluid.vert", "Simulation/jacobi.frag", "Simulation/layeredRender.geom");
+		vorticityProgram = Shader("Simulation/basicFluid.vert", "Simulation/vorticity.frag", "Simulation/layeredRender.geom");
+		boundaryProgram = Shader("Simulation/basicFluid.vert", "Simulation/obstacleBounds.frag", "Simulation/layeredRender.geom");
+		splatProgram = Shader("Simulation/basicFluid.vert", "Simulation/splat.frag", "Simulation/layeredRender.geom");
 
-		drawTexture = new Shader("Simulation/drawTexture.vert", "Simulation/drawTexture.frag");
+		drawTexture = Shader("Simulation/drawTexture.vert", "Simulation/drawTexture.frag");
 
-		rayDataProgram = new Shader("Simulation/rayData.vert", "Simulation/rayData.frag");
-		rayMarchProgram = new Shader("Simulation/rayMarching.vert", "Simulation/rayMarching.frag");
+		rayDataProgram = Shader("Simulation/rayData.vert", "Simulation/rayData.frag");
+		rayMarchProgram = Shader("Simulation/rayMarching.vert", "Simulation/rayMarching.frag");
 
     }
 
 	void Fluid::Initialize()
 	{
-		phi_hat = Framebuffer::CreateDoubleFramebuffer(gridDimension, 4);
-		phi_hat_1 = Framebuffer::CreateDoubleFramebuffer(gridDimension, 4);
-		velocity = Framebuffer::CreateDoubleFramebuffer(gridDimension, 3);
-		divergence = new Framebuffer(gridDimension, 1);
-		curl = new Framebuffer(gridDimension, 3);
-		dye = Framebuffer::CreateDoubleFramebuffer(gridDimension, 4);
-		temperature = Framebuffer::CreateDoubleFramebuffer(gridDimension, 1);
-		pressure = Framebuffer::CreateDoubleFramebuffer(gridDimension, 1);
-		obstacleBounds = new Framebuffer(gridDimension, 1);
-		rayData = new Framebuffer(screenSize, 4);
+		phi_hat = PingPongFramebuffer(gridDimension, 4);
+		phi_hat_1 = PingPongFramebuffer(gridDimension, 4);
+		velocity = PingPongFramebuffer(gridDimension, 3);
+		divergence = Framebuffer(gridDimension, 1);
+		curl =  Framebuffer(gridDimension, 3);
+		dye = PingPongFramebuffer(gridDimension, 4);
+		temperature = PingPongFramebuffer(gridDimension, 1);
+		pressure = PingPongFramebuffer(gridDimension, 1);
+		obstacleBounds = Framebuffer(gridDimension, 1);
+		rayData =  Framebuffer(screenSize, 4);
 
-		depthBuffer = new Framebuffer(screenSize, 4);
-		depthBuffer->AttachDepthBufferTexture();
+		depthBuffer = Framebuffer(screenSize, 4);
+		depthBuffer.AttachDepthBufferTexture();
 
 		drawBuffer = &dye.readFBO;
 
@@ -174,8 +174,8 @@ namespace FluidSimulation {
     void Fluid::setUpBoundaries()
     {
         glBindVertexArray(quadVAO);
-        boundaryProgram->Use();
-        boundaryProgram->SetVec3("gridDimension", gridDimension);
+        boundaryProgram.Use();
+        boundaryProgram.SetVec3("gridDimension", gridDimension);
         Write(obstacleBounds);
         glBindVertexArray(0);
     }
@@ -184,7 +184,7 @@ namespace FluidSimulation {
 	void Fluid::DrawDepthBuffer()
 	{
         glEnable(GL_DEPTH_TEST);
-        glBindFramebuffer(GL_FRAMEBUFFER, depthBuffer->GetFramebufferHandle());
+        glBindFramebuffer(GL_FRAMEBUFFER, depthBuffer.GetFramebufferHandle());
 
         glViewport(0, 0, screenSize.x, screenSize.y);
 
@@ -221,10 +221,10 @@ namespace FluidSimulation {
 
 
 	// Wrapper function for activating and binding 3D texture.
-    int Fluid::Read(Framebuffer* target, int textureTarget)
+    int Fluid::Read(Framebuffer& target, int textureTarget)
     {
 
-        GLuint textureHandle = target->GetColorTextureHandle();
+        GLuint textureHandle = target.GetColorTextureHandle();
 
         glActiveTexture(GL_TEXTURE0 + textureTarget);
         glBindTexture(GL_TEXTURE_3D, textureHandle);
@@ -233,11 +233,11 @@ namespace FluidSimulation {
     }
 
 	// Wrapper function for activating and writing to target framebuffer
-    void Fluid::Write(Framebuffer* target)
+    void Fluid::Write(Framebuffer& target)
     {
 
-        GLuint fboHandle = target->GetFramebufferHandle();
-        glm::vec3 fboTextureSize = target->GetFramebufferSize();
+        GLuint fboHandle = target.GetFramebufferHandle();
+        glm::vec3 fboTextureSize = target.GetFramebufferSize();
 
         glViewport(0, 0, fboTextureSize.x, fboTextureSize.y);
 
@@ -267,80 +267,80 @@ namespace FluidSimulation {
 	// Advects a fluid quantity by the fluid velocity
     void Fluid::Advect(PingPongFramebuffer& quantity, float timeStep, float dissipation)
     {
-		advectionProgram->Use();
-		advectionProgram->SetInt("obstacle", Read(obstacleBounds, 0));
-		advectionProgram->SetInt("velocity", Read(velocity.readFBO, 1));
-		advectionProgram->SetInt("quantity", Read(quantity.readFBO, 2));
-		advectionProgram->SetVec3("gridDimension", gridDimension);
-		advectionProgram->SetFloat("timeStep", timeStep);
-		advectionProgram->SetFloat("dissipation", dissipation);
+		advectionProgram.Use();
+		advectionProgram.SetInt("obstacle", Read(obstacleBounds, 0));
+		advectionProgram.SetInt("velocity", Read(velocity.readFBO, 1));
+		advectionProgram.SetInt("quantity", Read(quantity.readFBO, 2));
+		advectionProgram.SetVec3("gridDimension", gridDimension);
+		advectionProgram.SetFloat("timeStep", timeStep);
+		advectionProgram.SetFloat("dissipation", dissipation);
 		Write(quantity.writeFBO);
-		Framebuffer::Swap(quantity);
+		quantity.Swap();
     }
 
 	// Advection using Mac-Cormack scheme.
 	void Fluid::MacCormackAdvect(PingPongFramebuffer& quantity, float timeStep, float dissipation)
 	{
-		advectionProgram->Use();
-		advectionProgram->SetInt("obstacle", Read(obstacleBounds, 0));
-		advectionProgram->SetInt("velocity", Read(velocity.readFBO, 1));
-		advectionProgram->SetInt("quantity", Read(quantity.readFBO, 2));
-        advectionProgram->SetVec3("gridDimension", gridDimension);
-		advectionProgram->SetFloat("timeStep", timeStep);
-		advectionProgram->SetFloat("dissipation", dissipation);
+		advectionProgram.Use();
+		advectionProgram.SetInt("obstacle", Read(obstacleBounds, 0));
+		advectionProgram.SetInt("velocity", Read(velocity.readFBO, 1));
+		advectionProgram.SetInt("quantity", Read(quantity.readFBO, 2));
+        advectionProgram.SetVec3("gridDimension", gridDimension);
+		advectionProgram.SetFloat("timeStep", timeStep);
+		advectionProgram.SetFloat("dissipation", dissipation);
 		Write(phi_hat_1.writeFBO);
-		Framebuffer::Swap(phi_hat_1);
+		phi_hat_1.Swap();
 
-		advectionProgram->Use();
-		advectionProgram->SetInt("obstacle", Read(obstacleBounds, 0));
-		advectionProgram->SetInt("velocity", Read(velocity.readFBO, 1));
-		advectionProgram->SetInt("quantity", Read(phi_hat_1.readFBO, 2));
-        advectionProgram->SetVec3("gridDimension", gridDimension);
-		advectionProgram->SetFloat("timeStep", -timeStep);
-		advectionProgram->SetFloat("dissipation", dissipation);
+		advectionProgram.Use();
+		advectionProgram.SetInt("obstacle", Read(obstacleBounds, 0));
+		advectionProgram.SetInt("velocity", Read(velocity.readFBO, 1));
+		advectionProgram.SetInt("quantity", Read(phi_hat_1.readFBO, 2));
+        advectionProgram.SetVec3("gridDimension", gridDimension);
+		advectionProgram.SetFloat("timeStep", -timeStep);
+		advectionProgram.SetFloat("dissipation", dissipation);
 		Write(phi_hat.writeFBO);
-		Framebuffer::Swap(phi_hat);
+		phi_hat.Swap();
 
-		macCormackAdvectionProgram->Use();
-		macCormackAdvectionProgram->SetVec3("gridDimension", gridDimension);
-		macCormackAdvectionProgram->SetFloat("timeStep", timeStep);
-		macCormackAdvectionProgram->SetFloat("dissipation", dissipation);
-		macCormackAdvectionProgram->SetInt("obstacle", Read(obstacleBounds, 0));
-		macCormackAdvectionProgram->SetInt("velocity", Read(velocity.readFBO, 1));
-		macCormackAdvectionProgram->SetInt("phi_n", Read(quantity.readFBO, 2));
-		macCormackAdvectionProgram->SetInt("phi_hat", Read(phi_hat.readFBO, 3));
-		macCormackAdvectionProgram->SetInt("phi_hat_1", Read(phi_hat_1.readFBO, 4));
+		macCormackAdvectionProgram.Use();
+		macCormackAdvectionProgram.SetVec3("gridDimension", gridDimension);
+		macCormackAdvectionProgram.SetFloat("timeStep", timeStep);
+		macCormackAdvectionProgram.SetFloat("dissipation", dissipation);
+		macCormackAdvectionProgram.SetInt("obstacle", Read(obstacleBounds, 0));
+		macCormackAdvectionProgram.SetInt("velocity", Read(velocity.readFBO, 1));
+		macCormackAdvectionProgram.SetInt("phi_n", Read(quantity.readFBO, 2));
+		macCormackAdvectionProgram.SetInt("phi_hat", Read(phi_hat.readFBO, 3));
+		macCormackAdvectionProgram.SetInt("phi_hat_1", Read(phi_hat_1.readFBO, 4));
 		Write(quantity.writeFBO);
-		Framebuffer::Swap(quantity);
+		quantity.Swap();
 	}
 
 	// Computes fluid pressure, more iterations will grant a better result but will be more costly
 	void Fluid::JacobiPressure(unsigned int iterations, float pressureParam)
     {
-        divergenceProgram->Use();
-        divergenceProgram->SetVec3("gridDimension", gridDimension);
-        divergenceProgram->SetInt("obstacle", Read(obstacleBounds, 0));
-        divergenceProgram->SetInt("velocity", Read(velocity.readFBO, 1));
+        divergenceProgram.Use();
+        divergenceProgram.SetVec3("gridDimension", gridDimension);
+        divergenceProgram.SetInt("obstacle", Read(obstacleBounds, 0));
+        divergenceProgram.SetInt("velocity", Read(velocity.readFBO, 1));
         Write(divergence);
 
 
-        clearProgram->Use();
-        clearProgram->SetVec3("gridDimension", gridDimension);
-        clearProgram->SetInt("base", Read(pressure.readFBO, 0));
-        clearProgram->SetFloat("value", pressureParam);
+        clearProgram.Use();
+        clearProgram.SetVec3("gridDimension", gridDimension);
+        clearProgram.SetInt("base", Read(pressure.readFBO, 0));
+        clearProgram.SetFloat("value", pressureParam);
         Write(pressure.writeFBO);
-        Framebuffer::Swap(pressure);
+		pressure.Swap();
 
 
 		for (unsigned int i = 0; i < iterations; i++)
 		{
-			pressureProgram->Use();
-			pressureProgram->SetVec3("gridDimension", gridDimension);
-			pressureProgram->SetInt("obstacle", Read(obstacleBounds, 0));
-			pressureProgram->SetInt("divergence", Read(divergence, 1));
-			pressureProgram->SetInt("pressure", Read(pressure.readFBO, 2));
+			pressureProgram.Use();
+			pressureProgram.SetVec3("gridDimension", gridDimension);
+			pressureProgram.SetInt("obstacle", Read(obstacleBounds, 0));
+			pressureProgram.SetInt("divergence", Read(divergence, 1));
+			pressureProgram.SetInt("pressure", Read(pressure.readFBO, 2));
 			Write(pressure.writeFBO);
-			Framebuffer::Swap(pressure);
+			pressure.Swap();
 		}
 
     }
@@ -348,66 +348,66 @@ namespace FluidSimulation {
 	// Creates a gaussian splat in the base texture at the specified position with the specified radius and the specified color.
     void Fluid::Impulse(PingPongFramebuffer& base, glm::vec3 force, glm::vec3 pos, float radius)
     {
-        splatProgram->Use();
-        splatProgram->SetVec3("gridDimension", gridDimension);
-        splatProgram->SetInt("obstacle", Read(obstacleBounds, 0));
-        splatProgram->SetInt("base", Read(base.readFBO, 1));
-        splatProgram->SetVec3("color", force);
-        splatProgram->SetVec3("texSize", gridDimension);
-        splatProgram->SetVec3("position", pos);
-        splatProgram->SetFloat("radius", radius);
+        splatProgram.Use();
+        splatProgram.SetVec3("gridDimension", gridDimension);
+        splatProgram.SetInt("obstacle", Read(obstacleBounds, 0));
+        splatProgram.SetInt("base", Read(base.readFBO, 1));
+        splatProgram.SetVec3("color", force);
+        splatProgram.SetVec3("texSize", gridDimension);
+        splatProgram.SetVec3("position", pos);
+        splatProgram.SetFloat("radius", radius);
         Write(base.writeFBO);
-        Framebuffer::Swap(base);
+		base.Swap();
     }
 
 	// Computes fluid vorticity
     void Fluid::Vorticity(float timeStep, float vorticity)
     {
-		curlProgram->Use();
-		curlProgram->SetVec3("gridDimension", gridDimension);
-        curlProgram->SetInt("w", Read(velocity.readFBO, 0));
+		curlProgram.Use();
+		curlProgram.SetVec3("gridDimension", gridDimension);
+		curlProgram.SetInt("w", Read(velocity.readFBO, 0));
 		Write(curl);
 
 
-		vorticityProgram->Use();
-		vorticityProgram->SetVec3("gridDimension", gridDimension);
-		vorticityProgram->SetInt("obstacle", Read(obstacleBounds, 0));
-        vorticityProgram->SetInt("curl", Read(curl, 1));
-		vorticityProgram->SetInt("w", Read(velocity.readFBO, 2));
-		vorticityProgram->SetFloat("timeStep", timeStep);
-		vorticityProgram->SetFloat("vorticity", vorticity);
+		vorticityProgram.Use();
+		vorticityProgram.SetVec3("gridDimension", gridDimension);
+		vorticityProgram.SetInt("obstacle", Read(obstacleBounds, 0));
+        vorticityProgram.SetInt("curl", Read(curl, 1));
+		vorticityProgram.SetInt("w", Read(velocity.readFBO, 2));
+		vorticityProgram.SetFloat("timeStep", timeStep);
+		vorticityProgram.SetFloat("vorticity", vorticity);
 		Write(velocity.writeFBO);
-		Framebuffer::Swap(velocity);
+		velocity.Swap();
 
     }
 
 	// Gradient subtraction to compute final fluid velocity for this iteration.
     void Fluid::GradientSubtraction()
     {
-        gradientSubtractionProgram->Use();
-        gradientSubtractionProgram->SetVec3("gridDimension", gridDimension);
-        gradientSubtractionProgram->SetInt("obstacle", Read(obstacleBounds, 0));
-        gradientSubtractionProgram->SetInt("pressure", Read(pressure.readFBO, 1));
-        gradientSubtractionProgram->SetInt("velocity", Read(velocity.readFBO, 2));
+        gradientSubtractionProgram.Use();
+        gradientSubtractionProgram.SetVec3("gridDimension", gridDimension);
+        gradientSubtractionProgram.SetInt("obstacle", Read(obstacleBounds, 0));
+        gradientSubtractionProgram.SetInt("pressure", Read(pressure.readFBO, 1));
+        gradientSubtractionProgram.SetInt("velocity", Read(velocity.readFBO, 2));
         Write(velocity.writeFBO);
-        Framebuffer::Swap(velocity);
+		velocity.Swap();
     }
 
 
 	// Computes fluid buoyancy forces.
 	void Fluid::Buoyancy(PingPongFramebuffer& velocity, PingPongFramebuffer& dye, float timeStep, float buoyancy, float fluidWeight)
 	{
-        buoyancyProgram->Use();
-        buoyancyProgram->SetInt("obstacle", Read(obstacleBounds, 0));
-        buoyancyProgram->SetInt("velocity", Read(velocity.readFBO, 1));
-        buoyancyProgram->SetInt("temperature", Read(velocity.readFBO, 2));
-        buoyancyProgram->SetInt("dye", Read(dye.readFBO, 3));
-        buoyancyProgram->SetFloat("timeStep", timeStep);
-        buoyancyProgram->SetFloat("ambientTemp", param.AMBIENT_TEMPERATURE);
-        buoyancyProgram->SetFloat("buoyancy", buoyancy);
-        buoyancyProgram->SetFloat("weight", fluidWeight);
+        buoyancyProgram.Use();
+        buoyancyProgram.SetInt("obstacle", Read(obstacleBounds, 0));
+        buoyancyProgram.SetInt("velocity", Read(velocity.readFBO, 1));
+        buoyancyProgram.SetInt("temperature", Read(velocity.readFBO, 2));
+        buoyancyProgram.SetInt("dye", Read(dye.readFBO, 3));
+        buoyancyProgram.SetFloat("timeStep", timeStep);
+        buoyancyProgram.SetFloat("ambientTemp", param.AMBIENT_TEMPERATURE);
+        buoyancyProgram.SetFloat("buoyancy", buoyancy);
+        buoyancyProgram.SetFloat("weight", fluidWeight);
         Write(velocity.writeFBO);
-        Framebuffer::Swap(velocity);
+		velocity.Swap();
 	}
 
 
@@ -507,10 +507,10 @@ namespace FluidSimulation {
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		drawTexture->Use();
+		drawTexture.Use();
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, depthBuffer->GetColorTextureHandle());
-		drawTexture->SetInt("colorTexture", 0);
+		glBindTexture(GL_TEXTURE_2D, depthBuffer.GetColorTextureHandle());
+		drawTexture.SetInt("colorTexture", 0);
 
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -580,15 +580,15 @@ namespace FluidSimulation {
 		glBindVertexArray(boxVAO);
 
 
-		rayDataProgram->Use();
-		rayDataProgram->SetMat4("modelViewProj", modelViewProjection);
-		rayDataProgram->SetVec3("gridDimension", gridDimension);
+		rayDataProgram.Use();
+		rayDataProgram.SetMat4("modelViewProj", modelViewProjection);
+		rayDataProgram.SetVec3("gridDimension", gridDimension);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, depthBuffer->GetDepthTextureHandle());
-		rayDataProgram->SetInt("depthTexture", 0);
-		rayDataProgram->SetVec2("screenSize", screenSize);
-		rayDataProgram->SetFloat("zNear", 0.1f);
-		rayDataProgram->SetFloat("zFar", 100.f);
+		glBindTexture(GL_TEXTURE_2D, depthBuffer.GetDepthTextureHandle());
+		rayDataProgram.SetInt("depthTexture", 0);
+		rayDataProgram.SetVec2("screenSize", screenSize);
+		rayDataProgram.SetFloat("zNear", 0.1f);
+		rayDataProgram.SetFloat("zFar", 100.f);
 
 
 		glViewport(0, 0, screenSize.x, screenSize.y);
@@ -605,11 +605,11 @@ namespace FluidSimulation {
 		///  Back faces
 		/// 
 
-		rayDataProgram->SetBool("isBackFace", true);
+		rayDataProgram.SetBool("isBackFace", true);
 
 
 
-		glBindFramebuffer(GL_FRAMEBUFFER, rayData->GetFramebufferHandle());
+		glBindFramebuffer(GL_FRAMEBUFFER, rayData.GetFramebufferHandle());
 
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(0, 0, 0, 0);
@@ -622,7 +622,7 @@ namespace FluidSimulation {
 
 		/// Front faces
 
-		rayDataProgram->SetBool("isBackFace", false);
+		rayDataProgram.SetBool("isBackFace", false);
 
 		glCullFace(GL_BACK);
 
@@ -645,24 +645,24 @@ namespace FluidSimulation {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glBindVertexArray(quadVAO);
 
-		rayMarchProgram->Use();
-		rayMarchProgram->SetVec3("eyeOnGrid", eyeGridSpace);
-		rayMarchProgram->SetVec3("gridDim", gridDimension);
-		rayMarchProgram->SetVec3("recGridDim", glm::vec3(1.0f / gridDimension));
-		rayMarchProgram->SetFloat("maxGridDim", maxSide);
-		rayMarchProgram->SetFloat("gridScaleFactor", worldScale);
-		rayMarchProgram->SetVec2("RTSize", screenSize);
-		rayMarchProgram->SetMat4("invModelViewProj", inverseModelViewProjection);
-		rayMarchProgram->SetFloat("zNear", 0.1f);
+		rayMarchProgram.Use();
+		rayMarchProgram.SetVec3("eyeOnGrid", eyeGridSpace);
+		rayMarchProgram.SetVec3("gridDim", gridDimension);
+		rayMarchProgram.SetVec3("recGridDim", glm::vec3(1.0f / gridDimension));
+		rayMarchProgram.SetFloat("maxGridDim", maxSide);
+		rayMarchProgram.SetFloat("gridScaleFactor", worldScale);
+		rayMarchProgram.SetVec2("RTSize", screenSize);
+		rayMarchProgram.SetMat4("invModelViewProj", inverseModelViewProjection);
+		rayMarchProgram.SetFloat("zNear", 0.1f);
 		glActiveTexture(GL_TEXTURE0 + 0);
-		glBindTexture(GL_TEXTURE_2D, rayData->GetColorTextureHandle());
-		rayMarchProgram->SetInt("rayDataTexture", 0);
+		glBindTexture(GL_TEXTURE_2D, rayData.GetColorTextureHandle());
+		rayMarchProgram.SetInt("rayDataTexture", 0);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, jitterTexture);
-		rayMarchProgram->SetInt("jitterTexture", 1);
+		rayMarchProgram.SetInt("jitterTexture", 1);
 		
-		if (drawBuffer != NULL && *drawBuffer != NULL)
-			rayMarchProgram->SetInt("dyeTexture", Read(*drawBuffer, 2));
+		if (drawBuffer != NULL)
+			rayMarchProgram.SetInt("dyeTexture", Read(*drawBuffer, 2));
 
 
 
@@ -933,7 +933,7 @@ namespace FluidSimulation {
 
 		ImGui::Text("GPU: %s", gpuName);
 
-		ImGui::Text("FPS: %.2g", fps);
+		ImGui::Text("FPS: %i", (int)fps);
 
 		ImGui::SameLine(ImGui::CalcTextSize("FPS: 00	").x + ImGui::GetStyle().ItemSpacing.x);
 

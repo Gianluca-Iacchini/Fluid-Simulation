@@ -6,15 +6,13 @@
 // Fluid simulation core class
 namespace FluidSimulation {
 
-    typedef Framebuffer::PingPongFramebuffer PingPongFramebuffer;
-
     class Fluid
     {
     public:
         Fluid(glm::vec3 gridScale = glm::vec3(16));
         void Update(float timeStep);
-        int Read(Framebuffer* target, int textureTarget = -1);
-        void Write(Framebuffer* target);
+        int Read(Framebuffer& target, int textureTarget = -1);
+        void Write(Framebuffer& target);
         void Initialize();
         void DrawDepthBuffer();
     private:
@@ -72,41 +70,41 @@ namespace FluidSimulation {
 
         glm::vec3 gridDimension;
         fluid_param param;
+        
+        Shader advectionProgram;
+        Shader macCormackAdvectionProgram;
+        Shader divergenceProgram;
+        Shader curlProgram;
+        Shader gradientSubtractionProgram;
+        Shader buoyancyProgram;
+        Shader clearProgram;
+        Shader pressureProgram;
+        Shader diffuseProgram;
+        Shader vorticityProgram;
+        Shader boundaryProgram;
+        Shader splatProgram;
 
-        Shader* advectionProgram = nullptr;
-        Shader* macCormackAdvectionProgram = nullptr;
-        Shader* divergenceProgram = nullptr;
-        Shader* curlProgram = nullptr;
-        Shader* gradientSubtractionProgram = nullptr;
-        Shader* buoyancyProgram = nullptr;
-        Shader* clearProgram = nullptr;
-        Shader* pressureProgram = nullptr;
-        Shader* diffuseProgram = nullptr;
-        Shader* vorticityProgram = nullptr;
-        Shader* boundaryProgram = nullptr;
-        Shader* splatProgram = nullptr;
+        Shader drawTexture;
 
-        Shader* drawTexture = nullptr;
-
-        Shader* rayDataProgram = nullptr;
-        Shader* rayMarchProgram = nullptr;
+        Shader rayDataProgram;
+        Shader rayMarchProgram;
 
 
         PingPongFramebuffer velocity;
         PingPongFramebuffer phi_hat;
         PingPongFramebuffer phi_hat_1;
-        Framebuffer* divergence;
-        Framebuffer* curl;
+        Framebuffer divergence;
+        Framebuffer curl;
         PingPongFramebuffer dye;
         PingPongFramebuffer temperature;
         PingPongFramebuffer pressure;
         PingPongFramebuffer trackPart;
-        Framebuffer* obstacleBounds;
-        Framebuffer* rayData;
+        Framebuffer obstacleBounds;
+        Framebuffer rayData;
 
-        Framebuffer* depthBuffer;
+        Framebuffer depthBuffer;
 
-        Framebuffer** drawBuffer;
+        Framebuffer* drawBuffer;
 
 
         bool isImpulse = false;
