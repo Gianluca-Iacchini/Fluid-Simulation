@@ -11,6 +11,7 @@ The project can only be compiled on Windows platforms using Visual Studio 2022 a
 ## Usage
 Launch the project to view a simple smoke simulation. Other fluids simulations are possible by changing the parameters in the **Fluid** class.
 The mouse and WASD keys can be used to move the camera around the scene, as well as the E and Q keys to move the camera up and down respectively.
+Press TAB to show the mouse cursor. This allows you to interact with the simulation control window to change the fluid's values.
 
 ## Examples
 Here are some examples of the simulation
@@ -19,4 +20,4 @@ Here are some examples of the simulation
   <img src="https://user-images.githubusercontent.com/34865358/191581942-5c5a519d-9cae-4419-a551-1e785819bb02.gif" alt="animated" />
 </p>
 
-A video showing clipping and compositing can be found [here](https://www.youtube.com/watch?v=c3fzueAaLJA)
+A video showing clipping and compositing can be found [here](https://www.youtube.com/watch?v=5nx1qn9oEzc)
